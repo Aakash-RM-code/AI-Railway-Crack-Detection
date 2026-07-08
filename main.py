@@ -1,5 +1,6 @@
 import cv2
 import time
+import config
 from logger import DetectionLogger
 from detector import CrackDetector
 from ui import UI
@@ -11,16 +12,18 @@ def main():
     # -----------------------------
     # Initialize detector and UI
     # -----------------------------
-    detector = CrackDetector("best.pt")
+    detector = CrackDetector(config.MODEL_PATH)
     ui = UI()
     logger = DetectionLogger()
-    esp = ESP32Controller(port="COM3")
+    esp = esp = ESP32Controller()
 
     # -----------------------------
     # Open Camera
     # Change 0 or 1 depending on your webcam
     # -----------------------------
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture(config.CAMERA_INDEX)
+
+    
 
     if not cap.isOpened():
         print("❌ Error: Cannot open webcam")
@@ -58,7 +61,7 @@ def main():
         for box in results[0].boxes:
             confidence = float(box.conf[0])
 
-            if confidence >= 0.70:
+            if confidence >= config.CONFIDENCE_THRESHOLD:
                 crack_detected = True
                 break
 
