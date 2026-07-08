@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+.env
+
+# VS Code
+.vscode/
+
+# Logs
+logs/*.csv
+
+# Saved Images
+detections/
+
+# Videos
+videos/
+
+# Temporary
+*.tmp
+
+# Model Training Runs
+runs/
+
+# Jupyter
+.ipynb_checkpoints/
