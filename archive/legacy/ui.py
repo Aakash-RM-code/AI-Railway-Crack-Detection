@@ -1,3 +1,5 @@
+# ARCHIVED — legacy cv2 overlay drawing used by the legacy main.py only.
+# Superseded by the Flet dashboard (ui/). Kept for reference.
 import cv2
 from datetime import datetime
 

@@ -2,6 +2,9 @@ import os
 import csv
 import cv2
 from datetime import datetime
+import glob
+
+import config
 
 
 class DetectionLogger:
@@ -10,9 +13,9 @@ class DetectionLogger:
         self.last_saved = 0
         self.cooldown = 5
 
-        self.image_folder = "detections"
-        self.log_folder = "logs"
-        self.csv_file = os.path.join(self.log_folder, "detections.csv")
+        self.image_folder = config.DETECTIONS_DIR
+        self.log_folder = config.LOGS_DIR
+        self.csv_file = config.HISTORY_CSV
 
         os.makedirs(self.image_folder, exist_ok=True)
         os.makedirs(self.log_folder, exist_ok=True)
@@ -37,7 +40,7 @@ class DetectionLogger:
         current = time.time()
 
         if current - self.last_saved < self.cooldown:
-            return
+            return False
 
         self.last_saved = current
 
@@ -56,9 +59,14 @@ class DetectionLogger:
 
             writer = csv.writer(file)
 
+            image_relative_path = os.path.join("detections", image_name)
+
             writer.writerow([
-                timestamp.strftime("%Y-%m-%d %H:%M:%S"),
-                class_name,
-                round(confidence, 2),
-                image_name
-            ])
+    timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+    class_name,
+    round(confidence, 2),
+    image_relative_path
+])
+            return True
+       
+        

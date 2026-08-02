@@ -28,3 +28,28 @@ runs/
 
 # Jupyter
 .ipynb_checkpoints/
+
+# Flet runtime storage
+.flet/
+
+# Single-instance lock file
+.app.lock
+
+# Runtime log files
+app_output.log
+app_error.log
+
+# Generated inspection reports
+reports/
+
+# Demo video uploads
+uploads/
+
+# GSM settings (contains phone number — do not commit)
+config/*.csv
+
+# Refactor backup inventory
+backup/
+
+# Archived placeholder model (production model best.pt is tracked)
+archive/legacy/models/

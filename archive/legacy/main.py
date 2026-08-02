@@ -1,29 +1,32 @@
+# ARCHIVED — legacy OpenCV-window application superseded by the Flet app
+# (app.py). Kept for reference only; references modules by their pre-refactor
+# names and calls esp.update() which no longer exists — NOT runnable as-is.
 import cv2
 import time
+
 import config
-from logger import DetectionLogger
 from detector import CrackDetector
+from logger import DetectionLogger
 from ui import UI
 from esp32 import ESP32Controller
+from alert_manager import AlertManager
 
 
 def main():
 
     # -----------------------------
-    # Initialize detector and UI
+    # Initialize Components
     # -----------------------------
     detector = CrackDetector(config.MODEL_PATH)
     ui = UI()
     logger = DetectionLogger()
-    esp = esp = ESP32Controller()
+    esp = ESP32Controller()
+    alert_manager = AlertManager()
 
     # -----------------------------
     # Open Camera
-    # Change 0 or 1 depending on your webcam
     # -----------------------------
     cap = cv2.VideoCapture(config.CAMERA_INDEX)
-
-    
 
     if not cap.isOpened():
         print("❌ Error: Cannot open webcam")
@@ -45,59 +48,86 @@ def main():
             break
 
         # -----------------------------
-        # FPS Calculation
+        # FPS
         # -----------------------------
         current_time = time.time()
         fps = 1 / (current_time - prev_time)
         prev_time = current_time
 
         # -----------------------------
-        # Run YOLO Detection
+        # Run YOLO
         # -----------------------------
         results = detector.detect(frame)
-        # Check if any crack is detected with sufficient confidence
-        crack_detected = False
-
-        for box in results[0].boxes:
-            confidence = float(box.conf[0])
-
-            if confidence >= config.CONFIDENCE_THRESHOLD:
-                crack_detected = True
-                break
-
-# Update ESP32 LEDs
-        esp.update(crack_detected)
 
         # -----------------------------
-        # detectors.py
+        # Alert Manager
+        # -----------------------------
+        alert = alert_manager.process(
+            results,
+            detector.model.names
+        )
+
+        # Debug (remove later if you want)
+        print(alert)
+
+        # -----------------------------
+        # Update ESP32
+        # -----------------------------
+        esp.update(alert["severity"])
+
+        # -----------------------------
+        # Logger
         # -----------------------------
         for box in results[0].boxes:
-
-            cls = int(box.cls[0])
 
             conf = float(box.conf[0])
 
-            class_name = detector.model.names[cls]
+            if conf >= config.CONFIDENCE_THRESHOLD:
 
-            logger.save_detection(
-            frame,
-            class_name,
-            conf
-            )
+                cls = int(box.cls[0])
+                class_name = detector.model.names[cls]
 
+                logger.save_detection(
+                    frame,
+                    class_name,
+                    conf
+                )
 
         # -----------------------------
-        # Draw YOLO Bounding Boxes
+        # Draw YOLO
         # -----------------------------
         annotated_frame = results[0].plot()
 
         # -----------------------------
-        # Draw Professional UI
+        # Draw Custom UI
         # -----------------------------
         annotated_frame = ui.draw(
             annotated_frame,
             results,
             fps
+        )
+
+        # -----------------------------
+        # Display Alert
+        # -----------------------------
+        cv2.putText(
+            annotated_frame,
+            f"Status : {alert['severity']}",
+            (20, 80),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.9,
+            (0, 255, 255),
+            2
+        )
+
+        cv2.putText(
+            annotated_frame,
+            alert["message"],
+            (20, 120),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.8,
+            (0, 255, 255),
+            2
         )
 
         # -----------------------------
@@ -115,7 +145,7 @@ def main():
 
         if key == ord("q"):
             break
-    
+
     esp.close()
 
     cap.release()
