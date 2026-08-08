@@ -266,10 +266,13 @@ class ESP32Controller:
 
         Returns:
             Tuple of (latitude, longitude) or None if no fix
+
+        Note: Returns cached data populated by the background polling thread.
+        Does NOT trigger a synchronous HTTP request — safe to call from FastAPI
+        handler threads without blocking the event loop.
         """
-        # Ensure GPS is updated
-        self.get_gps()
-        return self._last_gps_data
+        with self._lock:
+            return self._last_gps_data
 
     def send_sms(self, phone: str, message: str) -> bool:
         """

@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+.pytest_cache/
 
 # Virtual Environment
 venv/
@@ -38,6 +39,14 @@ runs/
 # Runtime log files
 app_output.log
 app_error.log
+run_out.log
+run_err.log
+
+# Frontend build tooling cache/output (regenerated on demand, never committed)
+frontend/.output/
+frontend/.wrangler/
+frontend/.tanstack/
+frontend/dev-server.log
 
 # Generated inspection reports
 reports/

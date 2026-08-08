@@ -1,4 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Upload } from "lucide-react";
+import { useRef } from "react";
 
 import { SectionCard } from "@/components/common/SectionCard";
 import { StatusDot } from "@/components/common/StatusDot";
@@ -15,6 +17,8 @@ const SOURCES: CameraSource[] = ["usb", "esp32-cam", "demo-video"];
 
 export function CameraFeedCard() {
   const queryClient = useQueryClient();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const { data, isError, refetch, dataUpdatedAt } = useLiveQuery(
     ["camera"],
     () => monitoringApi.getCameraState(),
@@ -31,9 +35,32 @@ export function CameraFeedCard() {
     mutationFn: () => monitoringApi.disconnectCamera(),
     onSuccess: (state) => queryClient.setQueryData(["camera"], state),
   });
+  const uploadVideo = useMutation({
+    mutationFn: (file: File) => monitoringApi.uploadDemoVideo(file),
+    onSuccess: (state) => queryClient.setQueryData(["camera"], state),
+  });
 
   const state = data?.state ?? "disconnected";
   const live = state === "connected";
+  const busy = connect.isPending || uploadVideo.isPending;
+
+  const handleSourceClick = (source: CameraSource) => {
+    if (source === "demo-video") {
+      // Open the native file picker for demo video upload
+      fileInputRef.current?.click();
+    } else {
+      connect.mutate(source);
+    }
+  };
+
+  const handleFileSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      uploadVideo.mutate(file);
+    }
+    // Reset the input so the same file can be re-selected
+    event.target.value = "";
+  };
 
   return (
     <SectionCard
@@ -67,15 +94,25 @@ export function CameraFeedCard() {
         )}
       </div>
 
+      {/* Hidden file input for demo video upload */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="video/mp4,video/avi,video/quicktime,video/x-matroska,video/webm,.mp4,.avi,.mov,.mkv,.webm"
+        className="hidden"
+        onChange={handleFileSelected}
+      />
+
       <div className="flex flex-wrap items-center gap-2">
         {SOURCES.map((source) => (
           <Button
             key={source}
             size="sm"
             variant={data?.source === source && live ? "default" : "outline"}
-            disabled={connect.isPending}
-            onClick={() => connect.mutate(source)}
+            disabled={busy}
+            onClick={() => handleSourceClick(source)}
           >
+            {source === "demo-video" && <Upload className="mr-1.5 size-3.5" aria-hidden />}
             {CAMERA_SOURCE_LABELS[source]}
           </Button>
         ))}

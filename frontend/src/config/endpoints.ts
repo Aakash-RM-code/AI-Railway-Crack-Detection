@@ -26,6 +26,8 @@ export const API_ENDPOINTS = {
   latestSnapshot: "/api/detections/latest-snapshot",
   roverState: "/api/rover/state",
   roverCommand: "/api/rover/command",
+  uploadVideo: "/api/uploads/video",
+  reportGenerate: "/api/reports/generate",
 } as const;
 
 export const WS_CHANNELS = {

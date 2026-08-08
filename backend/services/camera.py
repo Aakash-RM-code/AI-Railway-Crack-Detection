@@ -199,8 +199,8 @@ class CameraManager:
     def process_frame(self, frame):
         """Run the full detection pipeline for a frame.
 
-        Returns a dict with the annotated frame, the generated alert, and the
-        updated statistics.
+        Returns a dict with the annotated frame, raw results, the generated alert,
+        and the updated statistics.
         """
         results = self.detector.detect(frame)
         alert = self.alert_manager.process(results, self.detector.model.names)
@@ -223,6 +223,7 @@ class CameraManager:
 
         return {
             "frame": annotated,
+            "results": results,
             "alert": alert,
             "stats": self.statistics.get_stats(),
             "logged": logged,
@@ -240,13 +241,16 @@ class CameraManager:
 
 class CameraPipeline:
     """Background pipeline that reads frames from a CameraManager, runs the
-    detection pipeline, and maintains the shared runtime state that the API
-    layer exposes.
+    decoupled detection pipeline, and maintains the shared runtime state that
+    the API layer exposes.
 
-    This replaces the AppController capture loop from the legacy Flet app. The
-    business logic is unchanged: frame rate, resolution, alert, stats, severity
-    counts, health scoring, and the CRITICAL emergency-stop trigger.
+    Decoupled Architecture:
+    - Camera capture + streaming loop runs continuously at ~25-30 FPS.
+    - AI inference worker runs on a separate background thread at ~10-13 FPS
+      using a latest-frame-wins strategy. Streaming never waits for inference.
     """
+
+    STALE_DETECTION_TTL_SEC = 0.5
 
     def __init__(self, mode: str | None = None, esp32_controller=None):
         self._lock = threading.RLock()
@@ -256,9 +260,15 @@ class CameraPipeline:
         self._camera_error: str | None = None
         self._camera_mode = (mode or getattr(config, "CAMERA_MODE", "usb")).strip().lower()
         self._camera_thread = None
+        self._inference_thread = None
 
+        self._latest_raw_frame = None
+        self._latest_raw_time = 0.0
+        self._latest_detection_results = None
+        self._frame_jpeg: bytes = b""
         self._frame_base64 = ""
         self._fps = 0.0
+        self._inference_fps = 0.0
         self._resolution = "--"
         self._alert = {
             "detected": False,
@@ -293,7 +303,7 @@ class CameraPipeline:
                 return True
             self._running = True
             self._camera_error = None
-            self._camera_thread = threading.Thread(target=self._camera_loop, daemon=True)
+            self._camera_thread = threading.Thread(target=self._camera_loop, daemon=True, name="CameraStreamLoop")
         self._camera_thread.start()
         return True
 
@@ -302,25 +312,25 @@ class CameraPipeline:
             self._running = False
 
     def close(self) -> None:
-        """Stop the camera loop."""
+        """Stop the camera loop and inference worker thread."""
         self.stop()
-        self._join_camera_thread()
+        self._join_threads()
 
-    def _join_camera_thread(self, timeout: float = 5.0) -> None:
-        thread = self._camera_thread
-        if thread and thread.is_alive():
-            thread.join(timeout=timeout)
+    def _join_threads(self, timeout: float = 5.0) -> None:
+        c_thread = self._camera_thread
+        if c_thread and c_thread.is_alive():
+            c_thread.join(timeout=timeout)
         self._camera_thread = None
+
+        i_thread = self._inference_thread
+        if i_thread and i_thread.is_alive():
+            i_thread.join(timeout=timeout)
+        self._inference_thread = None
 
     # ------------------------------------------------------------------ camera source switching
 
     def set_camera_source(self, mode: str, force: bool = False) -> bool:
-        """Switch the active camera source without restarting the service.
-
-        Stop -> release -> init new source -> auto-continue if the pipeline
-        was running. `force=True` re-initializes the current source (used by
-        the ESP32-CAM Reconnect action).
-        """
+        """Switch the active camera source without restarting the service."""
         mode = (mode or "").strip().lower()
 
         if mode not in CameraManager.SOURCES:
@@ -330,10 +340,15 @@ class CameraPipeline:
                 return True
             was_running = self._running
             self._running = False
-        self._join_camera_thread()
+        self._join_threads()
         with self._lock:
             self._camera_mode = mode
             self._camera_error = None
+            self._latest_raw_frame = None
+            self._latest_raw_time = 0.0
+            self._latest_detection_results = None
+            self._frame_jpeg = b""
+            self._frame_base64 = ""
         if was_running:
             self.start()
         return True
@@ -364,6 +379,7 @@ class CameraPipeline:
                 "mode": self._camera_mode,
                 "running": self._running,
                 "fps": self._fps,
+                "inference_fps": self._inference_fps,
                 "resolution": self._resolution,
                 "error": self._camera_error,
             }
@@ -379,8 +395,15 @@ class CameraPipeline:
         with self._lock:
             return self._camera_error
 
+    def get_frame_jpeg(self) -> bytes:
+        with self._lock:
+            return self._frame_jpeg
+
     def get_frame_base64(self) -> str:
         with self._lock:
+            if not self._frame_base64 and self._frame_jpeg:
+                import base64
+                self._frame_base64 = base64.b64encode(self._frame_jpeg).decode("utf-8")
             return self._frame_base64
 
     def get_fps(self) -> float:
@@ -422,7 +445,7 @@ class CameraPipeline:
                     "resolution": self._resolution,
                     "error": self._camera_error,
                 },
-                "frame_base64": self._frame_base64,
+                "frame_base64": self.get_frame_base64(),
                 "alert": dict(self._alert),
                 "stats": dict(self._stats),
                 "severity_counts": dict(self._severity_counts),
@@ -433,7 +456,68 @@ class CameraPipeline:
                 },
             }
 
-    # ------------------------------------------------------------------ camera loop
+    # ------------------------------------------------------------------ background workers
+
+    def _inference_loop(self, camera: CameraManager) -> None:
+        """Background worker running OpenVINO YOLO inference asynchronously.
+
+        Implements LATEST-FRAME-WINS: when inference finishes, it skips all
+        intermediate camera frames and picks the newest available raw frame.
+        NO LOCK is held during inference, alert processing, or disk logging.
+        """
+        last_processed_time = 0.0
+        prev_time = time.time()
+
+        while self._running:
+            raw_frame = None
+            raw_time = 0.0
+
+            with self._lock:
+                if self._latest_raw_frame is not None and self._latest_raw_time > last_processed_time:
+                    raw_frame = self._latest_raw_frame.copy()
+                    raw_time = self._latest_raw_time
+
+            if raw_frame is None:
+                time.sleep(0.005)
+                continue
+
+            last_processed_time = raw_time
+
+            try:
+                # Run detection + alert + statistics + logger without holding lock
+                result = camera.process_frame(raw_frame)
+                now = time.time()
+                inf_fps = 1.0 / max(now - prev_time, 1e-6)
+                prev_time = now
+
+                with self._lock:
+                    self._inference_fps = inf_fps
+                    self._latest_detection_results = {
+                        "results": result.get("results"),
+                        "alert": result.get("alert"),
+                        "stats": result.get("stats"),
+                        "timestamp": now,
+                    }
+
+                    alert = result["alert"]
+                    stats = result["stats"]
+                    self._alert = alert
+                    self._stats = stats
+
+                    sev = alert.get("severity", "SAFE")
+                    self._severity_counts[sev] = self._severity_counts.get(sev, 0) + 1
+                    self._update_health(stats.get("total", 0))
+
+                    if alert["severity"] == "CRITICAL" and self._estop_armed:
+                        self._estop_armed = False
+                        self._trigger_estop()
+                    elif alert["severity"] != "CRITICAL":
+                        self._estop_armed = True
+
+            except Exception:
+                pass
+
+            time.sleep(0.002)
 
     def _camera_loop(self) -> None:
         with self._lock:
@@ -448,6 +532,15 @@ class CameraPipeline:
                 self._camera_error = str(exc)
                 self._running = False
             return
+
+        # Start asynchronous inference worker thread
+        self._inference_thread = threading.Thread(
+            target=self._inference_loop,
+            args=(camera,),
+            daemon=True,
+            name="CameraInferenceWorker",
+        )
+        self._inference_thread.start()
 
         prev_time = time.time()
         last_frame_time = time.time()
@@ -470,30 +563,38 @@ class CameraPipeline:
                 fps = 1.0 / max(now - prev_time, 1e-6)
                 prev_time = now
 
-                result = camera.process_frame(frame)
-                annotated = result["frame"]
-                alert = result["alert"]
-                stats = result["stats"]
+                # Store raw frame for inference worker
+                with self._lock:
+                    self._latest_raw_frame = frame
+                    self._latest_raw_time = now
 
-                frame_b64 = jpeg_base64(annotated)
-                if frame_b64:
+                # Composite newest raw frame with latest valid detection overlay
+                display_frame = frame
+                det_res = None
+                with self._lock:
+                    if self._latest_detection_results is not None:
+                        if (now - self._latest_detection_results["timestamp"]) <= self.STALE_DETECTION_TTL_SEC:
+                            det_res = self._latest_detection_results.get("results")
+
+                if det_res and len(det_res) > 0 and len(det_res[0].boxes) > 0:
+                    try:
+                        display_frame = det_res[0].plot(img=frame.copy())
+                    except Exception:
+                        display_frame = frame
+
+                # Encode to JPEG bytes (NO LOCK HELD during JPEG encode)
+                ret, jpeg_buf = cv2.imencode(".jpg", display_frame, [int(cv2.IMWRITE_JPEG_QUALITY), 80])
+                if ret:
+                    jpeg_bytes = jpeg_buf.tobytes()
                     with self._lock:
-                        self._frame_base64 = frame_b64
+                        self._frame_jpeg = jpeg_bytes
+                        self._frame_base64 = ""
                         self._fps = fps
-                        height, width = annotated.shape[:2]
+                        height, width = display_frame.shape[:2]
                         self._resolution = f"{width} × {height}"
-                        self._alert = alert
-                        self._stats = stats
 
-                        sev = alert.get("severity", "SAFE")
-                        self._severity_counts[sev] = self._severity_counts.get(sev, 0) + 1
-                        self._update_health(stats.get("total", 0))
+                time.sleep(0.005)
 
-                if alert["severity"] == "CRITICAL" and self._estop_armed:
-                    self._estop_armed = False
-                    self._trigger_estop()
-                elif alert["severity"] != "CRITICAL":
-                    self._estop_armed = True
         except Exception as exc:
             with self._lock:
                 self._camera_error = str(exc)

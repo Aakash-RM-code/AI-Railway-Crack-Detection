@@ -51,6 +51,11 @@ export interface CameraConnectRequest {
   videoPath?: string;
 }
 
+export interface ReportResponse {
+  path: string;
+  url: string;
+}
+
 /**
  * The single contract the UI depends on.
  * Mock and REST/WebSocket implementations both satisfy this interface.
@@ -72,4 +77,6 @@ export interface MonitoringApi {
   getLatestSnapshot(): Promise<Snapshot>;
   getRoverState(): Promise<RoverState>;
   sendRoverCommand(request: RoverCommandRequest): Promise<RoverState>;
+  uploadDemoVideo(file: File): Promise<CameraState>;
+  generateInspectionReport(): Promise<ReportResponse>;
 }

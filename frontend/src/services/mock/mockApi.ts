@@ -244,4 +244,19 @@ export const mockApi: MonitoringApi = {
     };
     return delay({ ...state.rover }, 150);
   },
+
+  uploadDemoVideo: () => {
+    state.camera = {
+      ...state.camera,
+      source: "demo-video",
+      state: "connected",
+      detectionActive: true,
+      fps: randomInt(22, 30),
+      streamUrl: null,
+    };
+    return delay(state.camera, 800);
+  },
+
+  generateInspectionReport: () =>
+    delay({ path: "/reports/mock_report.pdf", url: "/api/reports/download/mock_report.pdf" }, 1000),
 };

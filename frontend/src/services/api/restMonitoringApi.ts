@@ -11,6 +11,7 @@ import type {
   DetectionQuery,
   MonitoringApi,
   Paginated,
+  ReportResponse,
   RoverCommandRequest,
   SendSmsRequest,
 } from "@/services/api";
@@ -84,6 +85,25 @@ async function httpPost<T>(path: string, body?: unknown): Promise<T> {
   }
 }
 
+async function httpPostFormData<T>(path: string, formData: FormData): Promise<T> {
+  const controller = new AbortController();
+  // Larger timeout for file uploads
+  const timer = setTimeout(() => controller.abort(), 60_000);
+  try {
+    const res = await fetch(`${API_BASE_URL}${path}`, {
+      method: "POST",
+      body: formData,
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+    if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText} — ${path}`);
+    return (await res.json()) as T;
+  } catch (err) {
+    clearTimeout(timer);
+    throw err;
+  }
+}
+
 // ──────────────────────────────────────────────
 // MonitoringApi — REST implementation
 // ──────────────────────────────────────────────
@@ -134,4 +154,12 @@ export const restMonitoringApi: MonitoringApi = {
 
   sendRoverCommand: (req: RoverCommandRequest) =>
     httpPost<RoverState>(API_ENDPOINTS.roverCommand, req),
+
+  uploadDemoVideo: (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    return httpPostFormData<CameraState>(API_ENDPOINTS.uploadVideo, formData);
+  },
+
+  generateInspectionReport: () => httpPost<ReportResponse>(API_ENDPOINTS.reportGenerate),
 };

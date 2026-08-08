@@ -69,8 +69,10 @@ async def startup_event() -> None:
 
     if config.ESP32_ENABLED:
         controller = ESP32Controller(config.ESP32_BASE_URL)
-        controller.connect()  # best-effort; marks online/offline explicitly
         controller.start_polling(config.POLLING_INTERVAL)
+        # Queue a best-effort connect check on the background polling thread
+        # instead of blocking startup for up to 9s when ESP32 is offline.
+        controller.submit(controller.connect, key="initial_connect")
         _esp32_controller = controller
         # Attach before or after pipeline creation — set_esp32 handles both.
         get_pipeline(esp32_controller=controller)

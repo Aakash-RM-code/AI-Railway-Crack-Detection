@@ -1,11 +1,13 @@
 """Camera control and video streaming routes."""
 
+import os
 import time
 import base64
 import cv2
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi.responses import StreamingResponse
 
+import config
 from backend.api import schemas
 from backend.api.auth import verify_hardware_token
 from backend.services.camera import get_pipeline
@@ -102,20 +104,16 @@ def _mjpeg_generator():
     """Generator yielding JPEG frames for HTTP MJPEG streaming."""
     pipeline = get_pipeline()
     while True:
-        frame_b64 = pipeline.get_frame_base64()
-        if frame_b64:
-            try:
-                jpg_bytes = base64.b64decode(frame_b64)
-                yield (
-                    b"--frame\r\n"
-                    b"Content-Type: image/jpeg\r\n\r\n" + jpg_bytes + b"\r\n"
-                )
-            except Exception:
-                pass
+        jpg_bytes = pipeline.get_frame_jpeg()
+        if jpg_bytes:
+            yield (
+                b"--frame\r\n"
+                b"Content-Type: image/jpeg\r\n\r\n" + jpg_bytes + b"\r\n"
+            )
         else:
             if not pipeline.is_running() and pipeline.camera_error():
                 break
-        time.sleep(0.04)  # ~25 FPS loop
+        time.sleep(0.03)  # ~30 FPS loop
 
 
 @router.get("/camera/stream")
@@ -164,3 +162,46 @@ def legacy_camera_source(body: schemas.CameraSourceRequest):
     if not ok:
         raise HTTPException(status_code=400, detail=f"Unknown camera source: {body.mode}")
     return pipeline.get_camera_info()
+
+
+# --------------------------------------------------------------------------
+# Demo video file upload
+# --------------------------------------------------------------------------
+
+_ALLOWED_VIDEO_EXTENSIONS = {".mp4", ".avi", ".mov", ".mkv", ".wmv", ".webm"}
+
+
+@router.post("/uploads/video", response_model=schemas.CameraState, dependencies=[Depends(verify_hardware_token)])
+def upload_demo_video(file: UploadFile = File(...)):
+    """Accept a video file upload, save to uploads/, switch pipeline to demo mode.
+
+    The browser sends the file via multipart/form-data — no raw filesystem path
+    is passed from the client. The backend validates the extension, saves the
+    file to config.UPLOADS_DIR, and starts the demo pipeline.
+    """
+    filename = file.filename or "uploaded_video"
+    ext = os.path.splitext(filename)[1].lower()
+    if ext not in _ALLOWED_VIDEO_EXTENSIONS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported video format '{ext}'. Allowed: {', '.join(sorted(_ALLOWED_VIDEO_EXTENSIONS))}",
+        )
+
+    os.makedirs(config.UPLOADS_DIR, exist_ok=True)
+    save_path = os.path.join(config.UPLOADS_DIR, filename)
+
+    try:
+        with open(save_path, "wb") as out:
+            while chunk := file.file.read(1024 * 1024):  # 1 MB chunks
+                out.write(chunk)
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Failed to save uploaded file: {exc}")
+
+    pipeline = get_pipeline()
+    pipeline.set_demo_video_path(save_path)
+    pipeline.set_camera_source("demo", force=True)
+
+    if not pipeline.is_running():
+        pipeline.start()
+
+    return _build_camera_state()
