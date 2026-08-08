@@ -53,3 +53,4 @@ backup/
 
 # Archived placeholder model (production model best.pt is tracked)
 archive/legacy/models/
+frontend/node_modules/

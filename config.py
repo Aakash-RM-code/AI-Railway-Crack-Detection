@@ -39,6 +39,16 @@ APP_LOCK_FILE = str(PROJECT_DIR / ".app.lock")
 # =====================================================
 
 CONFIDENCE_THRESHOLD = 0.70
+INFERENCE_IMGSZ = 640
+
+# Inference backend: "openvino" (default) | "torch".
+# OpenVINO is ~1.5-1.6x faster with equivalent detection results; CrackDetector
+# falls back to the PyTorch best.pt model automatically if the OpenVINO export
+# cannot be loaded. Set INFERENCE_BACKEND=torch to force the PyTorch path.
+INFERENCE_BACKEND = os.getenv("INFERENCE_BACKEND", "openvino").strip().lower()
+
+# OpenVINO IR export of best.pt; best.pt remains the canonical source model.
+OPENVINO_MODEL_PATH = str(MODELS_DIR / "best_openvino_model")
 
 # =====================================================
 # CAMERA
@@ -74,6 +84,11 @@ ESP32CAM_SNAPSHOT_URL = os.getenv(
 # ESP32 (rover control)
 # =====================================================
 
+# When "true", the app constructs an ESP32Controller, polls it, and attaches
+# it to the camera pipeline on startup. When "false" (or no hardware present),
+# hardware endpoints report explicit offline/unavailable state instead of fake data.
+ESP32_ENABLED = os.getenv("ESP32_ENABLED", "true").lower() in ("1", "true", "yes")
+
 ESP32_IP = os.getenv("ESP32_IP", "192.168.1.120")
 ESP32_PORT = os.getenv("ESP32_PORT", "80")
 ESP32_BASE_URL = f"http://{ESP32_IP}:{ESP32_PORT}"
@@ -90,3 +105,23 @@ MAX_SPEED = 255
 SPEED_SLOW = 80
 SPEED_MEDIUM = 150
 SPEED_FAST = 220
+
+# =====================================================
+# API SECURITY
+# =====================================================
+
+# Runtime environment: "development" (default) | "production".
+# In production the app refuses to start without an API_AUTH_TOKEN set.
+APP_ENV = os.getenv("APP_ENV", "development").strip().lower()
+
+# Comma-separated list of origins allowed to call this API. When set, CORS
+# is restricted to these origins; when "*" (default) CORS stays wide open for
+# local development only — never expose a hardware-control API with "*" publicly.
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "*")
+
+# Optional shared secret. When set, REST/WebSocket clients must send it via
+# `Authorization: Bearer <token>` (or `?token=` for WebSockets). Empty = open.
+#
+# Production requires a non-empty value (see backend/main.py startup guard).
+# The value must come from the environment — never hardcode a secret here.
+API_AUTH_TOKEN = os.getenv("API_AUTH_TOKEN", "").strip()

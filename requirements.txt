@@ -1,8 +1,13 @@
+# Backend runtime dependencies
 ultralytics
+openvino
 opencv-python
-pyserial
 numpy
-pandas
-streamlit
-flet
 reportlab
+requests
+fastapi
+uvicorn
+pydantic
+
+# NOTE: flet and streamlit were removed in the backend refactor.
+# The legacy Flet UI is archived under archive/legacy/.

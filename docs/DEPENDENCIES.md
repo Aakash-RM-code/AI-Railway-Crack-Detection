@@ -2,57 +2,58 @@
 
 ## Module import graph (active code)
 
-`config` is the only module imported by both `backend/` and `utils/`; `ui/`
-depends on `backend/`, `utils/`, and `config`. There are **no circular imports**
-and **no duplicate module names** in the active tree (verified by script).
+`config` is the only module imported by every package; `backend/services`
+depends on `backend/detector`, `backend/hardware`, `backend/storage`, and
+`backend/utils`. There are **no circular imports** and **no duplicate module
+names** in the active tree (verified by tests).
 
 ```
 config.py
-  ├── backend/esp32.py
-  ├── backend/camera_manager.py
-  ├── backend/logger.py
-  ├── backend/report_generator.py
-  ├── ui/controller.py
-  ├── ui/dashboard.py
-  └── utils/gsm_store.py
+  ├── backend/hardware/esp32.py
+  ├── backend/services/camera.py
+  ├── backend/services/alert_manager.py
+  ├── backend/services/logger.py
+  ├── backend/services/report_generator.py
+  ├── backend/storage/gsm_store.py
+  └── tests/test_backend.py
 
-backend/esp32.py               ← config
-backend/detector.py            ← config (CONFIDENCE_THRESHOLD, MODEL_PATH)
-backend/alert_manager.py       ← backend/esp32.py (send SMS), config
-backend/statistics_manager.py  ← (stdlib only)
-backend/logger.py              ← config
-backend/camera_manager.py      ← backend/detector, backend/alert_manager,
-                                 backend/statistics_manager, backend/logger, config
-backend/report_generator.py    ← config, controller (via parameter)
-ui/controller.py               ← config, backend/esp32, backend/camera_manager (lazy)
-ui/dashboard.py                ← config, ui/controller, ui/theme,
-                                 ui/components/*, backend/report_generator (lazy)
-ui/components/*                ← flet, ui/theme, ui/controller, config (per card)
-utils/gsm_store.py             ← config
-app.py                         ← config, ui/controller, ui/dashboard, flet
+backend/detector/detector.py          ← config
+backend/services/camera.py            ← backend/detector, backend/services/{alert_manager,
+                                        statistics_manager, logger}, backend/utils/imaging, config
+backend/services/alert_manager.py     ← config
+backend/services/statistics_manager.py← (stdlib only)
+backend/services/logger.py            ← config
+backend/services/history_manager.py   ← config
+backend/services/report_generator.py  ← config
+backend/hardware/esp32.py             ← config
+backend/hardware/gps.py               ← (wraps esp32 via parameter)
+backend/hardware/gsm.py               ← backend/storage/gsm_store
+backend/storage/gsm_store.py          ← config
+backend/utils/imaging.py              ← cv2 (lazy import)
+backend/api/routes.py                 ← backend.services.{camera,history_manager,report_generator}, schemas
+backend/api/websocket.py              ← backend.services.camera
+backend/api/schemas.py                ← pydantic
+backend/main.py                       ← backend.api.routes, backend.api.websocket
 ```
 
-`backend/camera_manager` is imported lazily inside `ui/controller.py`
-(`set_camera_source`, `_camera_loop`) to keep the module graph acyclic at
-import time; `backend/report_generator` is imported lazily in `ui/dashboard.py`
-so the heavy `reportlab` stack only loads when a report is actually generated.
+`backend/services/camera.py` imports the detector eagerly; the heavy `reportlab`
+stack only loads when a report is generated.
 
 ## External libraries
 
-| Package        | Used by                                                      | Notes                              |
-|----------------|--------------------------------------------------------------|------------------------------------|
-| `flet`         | `app.py`, `ui/*`                                             | Web-mode UI framework (0.86.4)     |
-| `ultralytics`  | `backend/detector.py`                                        | YOLO inference (`best.pt`)         |
-| `opencv-python`| `backend/camera_manager.py`, `backend/logger.py`, controller | Capture, encode, image save        |
-| `numpy`        | `backend/camera_manager.py`                                  | ESP32-CAM snapshot decode          |
-| `reportlab`    | `backend/report_generator.py`                                | PDF inspection reports             |
-| `pyserial`     | — (unused)                                                   | Only the archived serial shim used it |
-| `pandas`       | — (unused)                                                   | Listed in `requirements.txt` only  |
-| `streamlit`    | — (unused)                                                   | Listed in `requirements.txt` only  |
+| Package        | Used by                                          | Notes                                    |
+|----------------|--------------------------------------------------|------------------------------------------|
+| `ultralytics`  | `backend/detector/detector.py`                   | YOLO inference (`best.pt`)               |
+| `opencv-python`| `backend/services/camera.py`, `logger.py`, `utils`| Capture, encode, image save            |
+| `numpy`        | `backend/services/camera.py`                     | ESP32-CAM snapshot decode                |
+| `reportlab`    | `backend/services/report_generator.py`           | PDF inspection reports                   |
+| `requests`     | `backend/hardware/esp32.py`                      | Rover HTTP client + retries              |
+| `fastapi`      | `backend/api/*`, `backend/main.py`               | REST + WebSocket interface               |
+| `uvicorn`      | `backend/main.py` (runtime)                      | ASGI server                              |
+| `pydantic`     | `backend/api/schemas.py`                         | Request/response validation              |
 
-`requirements.txt` is intentionally **untouched** (out of scope for the
-refactor). `pandas`, `streamlit`, and `pyserial` remain listed there but are not
-referenced anywhere in the active code; they are candidate removals.
+Removed in the refactor: `flet`, `streamlit`, `pandas`, `pyserial` (no longer
+referenced by active code; `flet` only served the archived UI).
 
 ## Filesystem path dependencies
 
@@ -60,19 +61,20 @@ Every path flows through `config.py`:
 
 | Constant             | Default                                 | Consumed by                                  |
 |----------------------|-----------------------------------------|----------------------------------------------|
-| `MODEL_PATH`         | `models/best.pt`                        | `backend/detector.py`, `report_generator`    |
-| `HISTORY_CSV`        | `logs/detections.csv`                   | `backend/logger.py`, `report_generator`, `ui/controller`, history table |
-| `GSM_SETTINGS_CSV`   | `config/gsm_settings.csv`               | `utils/gsm_store.py`                         |
-| `APP_LOCK_FILE`      | `.app.lock`                             | `app.py`                                     |
-| `DETECTIONS_DIR`     | `detections/`                           | `backend/logger.py`, `report_generator`, `ui/controller` |
-| `LOGS_DIR`           | `logs/`                                 | `backend/logger.py`                          |
-| `REPORTS_DIR`        | `reports/`                              | `backend/report_generator.py`                |
-| `UPLOADS_DIR`        | `uploads/`                              | `ui/dashboard.py`                            |
-| `CONFIG_DIR`         | `config/`                               | `utils/gsm_store.py`                         |
+| `MODEL_PATH`         | `models/best.pt`                        | `backend/detector`, `report_generator`       |
+| `HISTORY_CSV`        | `logs/detections.csv`                   | `backend/services/logger`, `history_manager`, `report_generator` |
+| `GSM_SETTINGS_CSV`   | `config/gsm_settings.csv`               | `backend/storage/gsm_store`                  |
+| `APP_LOCK_FILE`      | `.app.lock`                             | legacy `app.py` (archived)                   |
+| `DETECTIONS_DIR`     | `detections/`                           | `backend/services/logger`, `history_manager`, `report_generator` |
+| `LOGS_DIR`           | `logs/`                                 | `backend/services/logger`                    |
+| `REPORTS_DIR`        | `reports/`                              | `backend/services/report_generator`          |
+| `UPLOADS_DIR`        | `uploads/`                              | legacy `ui/dashboard` (archived)             |
+| `CONFIG_DIR`         | `config/`                               | `backend/storage/gsm_store`                  |
 
 ## Verification commands
 
 ```powershell
-# Python 3.11 (sole interpreter used by this project)
-& "C:\Users\Aakash\AppData\Local\Programs\Python\Python311\python.exe" -c "import config, app, backend.camera_manager, ui.controller, ui.dashboard, utils.gsm_store; print('imports OK')"
+# Python 3.11 (project's reference interpreter)
+& "C:\Users\Aakash\AppData\Local\Programs\Python\Python311\python.exe" -c "import config, backend, backend.main; print('imports OK')"
+& "C:\Users\Aakash\AppData\Local\Programs\Python\Python311\python.exe" -m pytest tests/ -q
 ```

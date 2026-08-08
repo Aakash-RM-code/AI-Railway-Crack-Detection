@@ -8,12 +8,14 @@ An AI-powered railway crack detection system using:
 - OpenCV
 - ESP32 rover controller + ESP32-CAM
 - GSM (SMS alerts)
-- Flet (web dashboard)
+- FastAPI backend (REST + WebSocket, React-ready)
 - Python 3.11
 
-The system detects cracks in real time, displays a professional inspection UI,
-logs detections, saves snapshots, alerts via SMS, and controls the rover
-hardware through an ESP32.
+The system detects cracks in real time, exposes live detection state through a
+clean backend API, logs detections, saves snapshots, alerts via SMS, and
+controls the rover hardware through an ESP32. The legacy Flet web dashboard has
+been archived (`archive/legacy/ui/`); a future React frontend consumes the API
+in `backend/api/`.
 
 ## Features
 
@@ -27,7 +29,7 @@ hardware through an ESP32.
 - ✅ Track-health scoring
 - ✅ PDF inspection reports (`reports/`)
 - ✅ Rover control + emergency stop
-- ✅ Professional Flet dashboard
+- ✅ FastAPI REST + WebSocket interface (`backend/main.py`)
 
 ## Getting Started
 
@@ -38,30 +40,32 @@ hardware through an ESP32.
    & "C:\Users\Aakash\AppData\Local\Programs\Python\Python311\python.exe" -m pip install -r requirements.txt
    ```
 
-3. Run the app (web mode on `http://localhost:8080`):
+3. Run the backend (interactive docs on `http://localhost:8080/docs`):
 
    ```powershell
-   & "C:\Users\Aakash\AppData\Local\Programs\Python\Python311\python.exe" app.py
+   & "C:\Users\Aakash\AppData\Local\Programs\Python\Python311\python.exe" -m uvicorn backend.main:app --host 0.0.0.0 --port 8080
    ```
 
-   or double-click `run_app.bat`.
-
-See `docs/START_HERE.md` for configuration and `docs/TODO.md` for the backlog.
+See `docs/BACKEND_OVERVIEW.md` and `docs/API_PLAN.md` for how the backend runs
+and how a React frontend can integrate.
 
 ## Project Structure
 
 ```
-app.py            entry point (Flet web app, single-instance lock)
 config.py         single source of truth for paths & settings
-backend/          server-side pipeline (detector, alert, stats, logger,
-                  camera manager, ESP32 control, report generator)
-ui/               Flet front-end (controller singleton + dashboard + components)
-utils/            helpers (GSM settings store)
+backend/          FastAPI-ready backend (api/, detector/, hardware/, services/,
+                  storage/, utils/)
+  main.py         FastAPI application entry point
+  api/            REST routes + WebSocket + pydantic schemas
+  services/       detection pipeline (camera, alert, stats, history, logger,
+                  report generator)
+  hardware/       ESP32 control + GPS/GSM wrappers
 models/best.pt    production YOLO model
 detections/       saved snapshots        logs/detections.csv   detection history
 reports/          generated PDF reports  uploads/              demo video uploads
-archive/legacy/   superseded / unused code (not imported)
-docs/             PROJECT_TREE, ARCHITECTURE, DEPENDENCIES, START_HERE, TODO
+archive/legacy/   superseded / archived code (Flet UI, old flat backend)
+docs/             PROJECT_TREE, ARCHITECTURE, DEPENDENCIES, API_PLAN,
+                  BACKEND_OVERVIEW, START_HERE, TODO
 ```
 
 For the full layout see `docs/PROJECT_TREE.md`.
@@ -73,5 +77,7 @@ For the full layout see `docs/PROJECT_TREE.md`.
 | `docs/PROJECT_TREE.md` | Full filesystem layout |
 | `docs/ARCHITECTURE.md` | Layers, modules, data flow, threading model |
 | `docs/DEPENDENCIES.md` | Import graph, libraries, path dependencies |
+| `docs/API_PLAN.md` | Planned API surface + React integration checklist |
+| `docs/BACKEND_OVERVIEW.md` | Running the backend, wiring a React client |
 | `docs/START_HERE.md` | Setup, run, configuration |
 | `docs/TODO.md` | Improvement backlog |

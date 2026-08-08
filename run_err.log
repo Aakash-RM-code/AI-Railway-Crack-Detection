@@ -1,0 +1,961 @@
+2026-08-02 21:20:17,752 - __main__ - INFO - ==================================================
+2026-08-02 21:20:17,803 - __main__ - INFO - ESP32 Rover Control System
+2026-08-02 21:20:17,803 - __main__ - INFO - ==================================================
+2026-08-02 21:20:18,308 - __main__ - INFO - Starting in web mode on http://localhost:8080...
+2026-08-02 21:20:18,452 - flet - INFO - Assets path configured: D:\Python\crack_det_v_1\assets
+2026-08-02 21:20:19,504 - flet - INFO - Starting Flet web server on port 8080...
+2026-08-02 21:20:19,512 - flet_web.fastapi - INFO - Web renderer configured: WebRenderer.AUTO
+2026-08-02 21:20:19,512 - flet_web.fastapi - INFO - Route URL strategy configured: RouteUrlStrategy.PATH
+2026-08-02 21:20:19,512 - flet_web.fastapi - INFO - No CDN configured: False
+2026-08-02 21:20:19,512 - flet - INFO - Flet app has started...
+INFO:     Started server process [9784]
+INFO:     Waiting for application startup.
+2026-08-02 21:20:19,595 - flet_web.fastapi - INFO - Starting up Flet App Manager
+2026-08-02 21:20:19,601 - flet - INFO - App URL: http://127.0.0.1:8080
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2026-08-02 21:20:20,047 - flet_web.fastapi - INFO - Temp dir created for patched index and manifest: C:\Users\Aakash\AppData\Local\Temp\tmpnktrgwmc
+2026-08-02 21:20:20,080 - flet_web.fastapi - INFO - Web root: C:\Users\Aakash\AppData\Local\Programs\Python\Python311\Lib\site-packages\flet_web\web
+2026-08-02 21:20:20,110 - flet_web.fastapi - INFO - Assets dir: D:\Python\crack_det_v_1\assets
+2026-08-02 21:20:20,456 - flet_web.fastapi - INFO - New FletApp: ULIeEOPV
+INFO:     127.0.0.1:54788 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,509 - flet_web.fastapi - INFO - New FletApp: xvdVg6Rq
+INFO:     ::1:60826 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,524 - flet_web.fastapi - INFO - New FletApp: y3nVf5Kn
+INFO:     127.0.0.1:64665 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,529 - flet_web.fastapi - INFO - New FletApp: e1YId9Ie
+INFO:     ::1:57047 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,542 - flet_web.fastapi - INFO - New FletApp: D0jW0W3V
+INFO:     127.0.0.1:56946 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,546 - flet_web.fastapi - INFO - New FletApp: 1hFBdevv
+INFO:     ::1:49775 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,557 - flet_web.fastapi - INFO - New FletApp: TU5vFrct
+INFO:     127.0.0.1:63637 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,563 - flet_web.fastapi - INFO - New FletApp: 58yczz9B
+INFO:     ::1:57236 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,575 - flet_web.fastapi - INFO - New FletApp: Br46oN0g
+INFO:     127.0.0.1:63147 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,582 - flet_web.fastapi - INFO - New FletApp: F2VVxN3o
+INFO:     ::1:51094 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,589 - flet_web.fastapi - INFO - New FletApp: 8bf025IO
+INFO:     127.0.0.1:57771 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,597 - flet_web.fastapi - INFO - New FletApp: KkIhwhn5
+INFO:     ::1:63109 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,609 - flet_web.fastapi - INFO - New FletApp: YIRcyT7p
+INFO:     127.0.0.1:64310 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,615 - flet_web.fastapi - INFO - New FletApp: xr9WOxYB
+INFO:     ::1:58836 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,637 - flet_web.fastapi - INFO - New FletApp: 9dvOBQYZ
+INFO:     127.0.0.1:49670 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,637 - flet_web.fastapi - INFO - New FletApp: vssUKBkE
+INFO:     ::1:60694 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,658 - flet_web.fastapi - INFO - New FletApp: NZC6cBbZ
+INFO:     127.0.0.1:62554 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,658 - flet_web.fastapi - INFO - New FletApp: uqaSldVo
+INFO:     ::1:51448 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,679 - flet_web.fastapi - INFO - New FletApp: ECTbZD92
+INFO:     127.0.0.1:51408 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,679 - flet_web.fastapi - INFO - New FletApp: znJ1weSE
+INFO:     ::1:54172 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,707 - flet_web.fastapi - INFO - New FletApp: Ds963XLJ
+INFO:     127.0.0.1:60426 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,707 - flet_web.fastapi - INFO - New FletApp: aG2hJjDq
+INFO:     ::1:49940 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,734 - flet_web.fastapi - INFO - New FletApp: r6rJC4HT
+INFO:     127.0.0.1:56502 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,734 - flet_web.fastapi - INFO - New FletApp: W1sVBTHa
+INFO:     ::1:55218 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,762 - flet_web.fastapi - INFO - New FletApp: PpJHDJIj
+INFO:     127.0.0.1:53116 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,762 - flet_web.fastapi - INFO - New FletApp: MeUvYxIY
+INFO:     ::1:50856 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,790 - flet_web.fastapi - INFO - New FletApp: Mym402x8
+INFO:     127.0.0.1:60062 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,790 - flet_web.fastapi - INFO - New FletApp: ToI1FErd
+INFO:     ::1:61976 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,818 - flet_web.fastapi - INFO - New FletApp: IkYC88Q7
+INFO:     127.0.0.1:63621 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,818 - flet_web.fastapi - INFO - New FletApp: BFdTFchO
+INFO:     ::1:55075 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,846 - flet_web.fastapi - INFO - New FletApp: t3bWr8bY
+INFO:     127.0.0.1:55523 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,846 - flet_web.fastapi - INFO - New FletApp: IqxzNBSf
+INFO:     ::1:59136 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,866 - flet_web.fastapi - INFO - New FletApp: yKDzBrAH
+INFO:     127.0.0.1:54235 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,869 - flet_web.fastapi - INFO - New FletApp: yVPRo9Fq
+INFO:     ::1:54924 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,887 - flet_web.fastapi - INFO - New FletApp: YGv6g6S0
+INFO:     127.0.0.1:53391 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,887 - flet_web.fastapi - INFO - New FletApp: rFYO4xRC
+INFO:     ::1:51768 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,915 - flet_web.fastapi - INFO - New FletApp: hQd81c5T
+INFO:     127.0.0.1:57013 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,915 - flet_web.fastapi - INFO - New FletApp: 9l2CCCAJ
+INFO:     ::1:64720 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,936 - flet_web.fastapi - INFO - New FletApp: v7N8VxrD
+INFO:     127.0.0.1:63164 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,936 - flet_web.fastapi - INFO - New FletApp: TVmJsikl
+INFO:     ::1:65029 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,956 - flet_web.fastapi - INFO - New FletApp: 05sIW8Kx
+INFO:     127.0.0.1:59943 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,956 - flet_web.fastapi - INFO - New FletApp: KDzEmJVS
+INFO:     ::1:64496 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,978 - flet_web.fastapi - INFO - New FletApp: ooamXhZs
+INFO:     127.0.0.1:61697 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:20,984 - flet_web.fastapi - INFO - New FletApp: XtxdtZP5
+INFO:     ::1:54698 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,006 - flet_web.fastapi - INFO - New FletApp: kw49T0hg
+INFO:     127.0.0.1:57565 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,006 - flet_web.fastapi - INFO - New FletApp: iJUOIyyC
+INFO:     ::1:56929 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,026 - flet_web.fastapi - INFO - New FletApp: cpNpUNIy
+INFO:     127.0.0.1:53629 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,026 - flet_web.fastapi - INFO - New FletApp: N0vovul6
+INFO:     ::1:51418 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,047 - flet_web.fastapi - INFO - New FletApp: qnKy5WQx
+INFO:     127.0.0.1:65433 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,047 - flet_web.fastapi - INFO - New FletApp: duLuyqZQ
+INFO:     ::1:55030 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,075 - flet_web.fastapi - INFO - New FletApp: nlUj681F
+INFO:     127.0.0.1:60251 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,075 - flet_web.fastapi - INFO - New FletApp: bfataxYO
+INFO:     ::1:58422 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,096 - flet_web.fastapi - INFO - New FletApp: iZ1ByuQB
+INFO:     127.0.0.1:59102 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,096 - flet_web.fastapi - INFO - New FletApp: MI6Nq6xP
+INFO:     ::1:61093 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,118 - flet_web.fastapi - INFO - New FletApp: hT09ZwRC
+INFO:     127.0.0.1:53463 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,118 - flet_web.fastapi - INFO - New FletApp: nO0iuysJ
+INFO:     ::1:64048 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,145 - flet_web.fastapi - INFO - New FletApp: mj88Qnwl
+INFO:     127.0.0.1:55857 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,145 - flet_web.fastapi - INFO - New FletApp: JAM0LS5N
+INFO:     ::1:50587 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,172 - flet_web.fastapi - INFO - New FletApp: sl52dPTV
+INFO:     127.0.0.1:62840 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,172 - flet_web.fastapi - INFO - New FletApp: kx3RlVLX
+INFO:     ::1:64137 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,186 - flet_web.fastapi - INFO - New FletApp: Twt3SteW
+INFO:     127.0.0.1:54000 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,186 - flet_web.fastapi - INFO - New FletApp: 7vAwQxH1
+INFO:     ::1:63930 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,207 - flet_web.fastapi - INFO - New FletApp: cwhXOLCQ
+INFO:     127.0.0.1:55344 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,207 - flet_web.fastapi - INFO - New FletApp: 0SKW4xaf
+INFO:     ::1:60535 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,235 - flet_web.fastapi - INFO - New FletApp: JAbdivtx
+INFO:     127.0.0.1:61820 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,237 - flet_web.fastapi - INFO - New FletApp: HiqPABuf
+INFO:     ::1:59003 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,256 - flet_web.fastapi - INFO - New FletApp: ZKRmtENh
+INFO:     127.0.0.1:62596 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,256 - flet_web.fastapi - INFO - New FletApp: 8Z00w6Xu
+INFO:     ::1:52676 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,277 - flet_web.fastapi - INFO - New FletApp: VdsH0H58
+INFO:     127.0.0.1:53804 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,277 - flet_web.fastapi - INFO - New FletApp: hdTOG2cX
+INFO:     ::1:56301 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,304 - flet_web.fastapi - INFO - New FletApp: S8Q3XXus
+INFO:     127.0.0.1:54858 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,304 - flet_web.fastapi - INFO - New FletApp: SAwvukdL
+INFO:     ::1:50444 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,325 - flet_web.fastapi - INFO - New FletApp: mYct1sJo
+INFO:     127.0.0.1:51085 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,325 - flet_web.fastapi - INFO - New FletApp: lajuHTkv
+INFO:     ::1:63039 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,347 - flet_web.fastapi - INFO - New FletApp: Mx4dXNa5
+INFO:     127.0.0.1:61519 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,347 - flet_web.fastapi - INFO - New FletApp: iysm9Z53
+INFO:     ::1:50187 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,373 - flet_web.fastapi - INFO - New FletApp: W8fUH7AH
+INFO:     127.0.0.1:62098 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,373 - flet_web.fastapi - INFO - New FletApp: hqYXL8Q0
+INFO:     ::1:58336 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,394 - flet_web.fastapi - INFO - New FletApp: UrTii4po
+INFO:     127.0.0.1:60727 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,394 - flet_web.fastapi - INFO - New FletApp: SlHKqTHl
+INFO:     ::1:61864 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,422 - flet_web.fastapi - INFO - New FletApp: q9NFLbCd
+INFO:     127.0.0.1:53549 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,422 - flet_web.fastapi - INFO - New FletApp: fbK8iipO
+INFO:     ::1:61295 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,442 - flet_web.fastapi - INFO - New FletApp: tAY2EdIq
+INFO:     127.0.0.1:52163 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,446 - flet_web.fastapi - INFO - New FletApp: xqW65CxI
+INFO:     ::1:57453 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,461 - flet_web.fastapi - INFO - New FletApp: lMa9weE3
+INFO:     127.0.0.1:61483 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,462 - flet_web.fastapi - INFO - New FletApp: fKO6ZGdT
+INFO:     ::1:61298 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,478 - flet_web.fastapi - INFO - New FletApp: mKdlG6Q8
+INFO:     127.0.0.1:55569 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,478 - flet_web.fastapi - INFO - New FletApp: Bpb0ZCDy
+INFO:     ::1:65168 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,496 - flet_web.fastapi - INFO - New FletApp: zL5QcBnb
+INFO:     127.0.0.1:61526 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,497 - flet_web.fastapi - INFO - New FletApp: nLhQMoYA
+INFO:     ::1:64405 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,514 - flet_web.fastapi - INFO - New FletApp: Ayzm2qzX
+INFO:     127.0.0.1:57527 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,518 - flet_web.fastapi - INFO - New FletApp: suC7hsc3
+INFO:     ::1:50154 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,530 - flet_web.fastapi - INFO - New FletApp: qyNCljxp
+INFO:     127.0.0.1:54281 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,535 - flet_web.fastapi - INFO - New FletApp: JWGYRWrw
+INFO:     ::1:58337 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,548 - flet_web.fastapi - INFO - New FletApp: CwWGVq9p
+INFO:     127.0.0.1:54154 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,548 - flet_web.fastapi - INFO - New FletApp: bs9D7UBt
+INFO:     ::1:53655 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,562 - flet_web.fastapi - INFO - New FletApp: JzdtXPzr
+INFO:     127.0.0.1:64758 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,566 - flet_web.fastapi - INFO - New FletApp: HeieQLc7
+INFO:     ::1:55167 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,576 - flet_web.fastapi - INFO - New FletApp: tTtvzW8G
+INFO:     127.0.0.1:56183 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,583 - flet_web.fastapi - INFO - New FletApp: 45xqsWHa
+INFO:     ::1:60710 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,587 - flet_web.fastapi - INFO - New FletApp: psdSTX8m
+INFO:     127.0.0.1:59866 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,594 - flet_web.fastapi - INFO - New FletApp: YvXIHSFU
+INFO:     ::1:52246 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,604 - flet_web.fastapi - INFO - New FletApp: vPigcZPX
+INFO:     127.0.0.1:62870 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,623 - flet_web.fastapi - INFO - New FletApp: SALqWdNe
+INFO:     ::1:56064 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,623 - flet_web.fastapi - INFO - New FletApp: RtvorrDO
+INFO:     127.0.0.1:60383 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,637 - flet_web.fastapi - INFO - New FletApp: 43hf5KsC
+INFO:     ::1:60800 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,643 - flet_web.fastapi - INFO - New FletApp: LzYm95ch
+INFO:     127.0.0.1:49835 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,664 - flet_web.fastapi - INFO - New FletApp: JxleBydI
+INFO:     ::1:59048 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,664 - flet_web.fastapi - INFO - New FletApp: WH8CMhzp
+INFO:     127.0.0.1:54699 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,692 - flet_web.fastapi - INFO - New FletApp: NNVOaUsA
+INFO:     ::1:65516 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,692 - flet_web.fastapi - INFO - New FletApp: Mpj7zypg
+INFO:     127.0.0.1:64339 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,713 - flet_web.fastapi - INFO - New FletApp: bPiWw1gl
+INFO:     ::1:49743 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,713 - flet_web.fastapi - INFO - New FletApp: 4JQBbN3j
+INFO:     127.0.0.1:54663 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,734 - flet_web.fastapi - INFO - New FletApp: mE73WGI7
+INFO:     ::1:63714 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,734 - flet_web.fastapi - INFO - New FletApp: 8n7INaNK
+INFO:     127.0.0.1:50609 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,761 - flet_web.fastapi - INFO - New FletApp: zhRYLlyH
+INFO:     ::1:61182 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,761 - flet_web.fastapi - INFO - New FletApp: Lqk4ygDU
+INFO:     127.0.0.1:65258 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,777 - flet_web.fastapi - INFO - New FletApp: jyUZPb7i
+INFO:     ::1:54792 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,777 - flet_web.fastapi - INFO - New FletApp: D8oY1f2F
+INFO:     127.0.0.1:61750 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,795 - flet_web.fastapi - INFO - New FletApp: nsFih0Mw
+INFO:     ::1:62822 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,800 - flet_web.fastapi - INFO - New FletApp: y9NsEEb7
+INFO:     127.0.0.1:53442 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,810 - flet_web.fastapi - INFO - New FletApp: XhP2qNE3
+INFO:     ::1:61561 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,810 - flet_web.fastapi - INFO - New FletApp: bI8KmQWE
+INFO:     127.0.0.1:59798 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,826 - flet_web.fastapi - INFO - New FletApp: VLKX9rIw
+INFO:     ::1:54904 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,828 - flet_web.fastapi - INFO - New FletApp: XXSb0KDC
+INFO:     127.0.0.1:59201 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,844 - flet_web.fastapi - INFO - New FletApp: ZvDIejpW
+INFO:     ::1:58798 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,844 - flet_web.fastapi - INFO - New FletApp: fmi6mTkI
+INFO:     127.0.0.1:55328 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,860 - flet_web.fastapi - INFO - New FletApp: mydBP0fc
+INFO:     ::1:59816 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,865 - flet_web.fastapi - INFO - New FletApp: f59wKY7j
+INFO:     127.0.0.1:52348 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,879 - flet_web.fastapi - INFO - New FletApp: vL6G6CBs
+INFO:     ::1:55175 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,879 - flet_web.fastapi - INFO - New FletApp: PDy1HzRn
+INFO:     127.0.0.1:55009 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,893 - flet_web.fastapi - INFO - New FletApp: HZPd9e8U
+INFO:     ::1:61898 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,893 - flet_web.fastapi - INFO - New FletApp: rhx48PJ7
+INFO:     127.0.0.1:57015 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,915 - flet_web.fastapi - INFO - New FletApp: nsqMXui1
+INFO:     ::1:64549 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,917 - flet_web.fastapi - INFO - New FletApp: YSNunAEg
+INFO:     127.0.0.1:65036 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,929 - flet_web.fastapi - INFO - New FletApp: uBwBDlVU
+INFO:     ::1:55631 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,933 - flet_web.fastapi - INFO - New FletApp: ecTrjPyB
+INFO:     127.0.0.1:61801 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,947 - flet_web.fastapi - INFO - New FletApp: c93FXRrI
+INFO:     ::1:65373 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,950 - flet_web.fastapi - INFO - New FletApp: 9afaXrcm
+INFO:     127.0.0.1:60419 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,963 - flet_web.fastapi - INFO - New FletApp: rdKB9w9Y
+INFO:     ::1:56345 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,963 - flet_web.fastapi - INFO - New FletApp: kt8COEqu
+INFO:     127.0.0.1:59851 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,978 - flet_web.fastapi - INFO - New FletApp: RkexGPMy
+INFO:     ::1:56957 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,983 - flet_web.fastapi - INFO - New FletApp: mqqnlsJY
+INFO:     127.0.0.1:56592 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:21,991 - flet_web.fastapi - INFO - New FletApp: J6LhwhjF
+INFO:     ::1:51111 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,000 - flet_web.fastapi - INFO - New FletApp: POMdDOdr
+INFO:     127.0.0.1:58469 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,019 - flet_web.fastapi - INFO - New FletApp: YMEqHaIs
+INFO:     ::1:54686 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,019 - flet_web.fastapi - INFO - New FletApp: lNS3ab3M
+INFO:     127.0.0.1:65277 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,026 - flet_web.fastapi - INFO - New session created (1 total): _OeQRR9m1X8soAdb3_7b098b11c06442e53a3cca17bf52017694ce45d2
+2026-08-02 21:20:22,026 - flet_web.fastapi - INFO - Start session: OeQRR9m1X8soAdb3
+2026-08-02 21:20:22,026 - __main__ - INFO - Starting application...
+2026-08-02 21:20:22,054 - __main__ - INFO - Creating controller...
+2026-08-02 21:20:22,056 - backend.esp32 - INFO - ESP32Controller initialized with base URL: http://192.168.1.120:80
+2026-08-02 21:20:22,056 - __main__ - INFO - Creating dashboard...
+2026-08-02 21:20:22,325 - backend.esp32 - INFO - Polling thread started (interval=2s)
+2026-08-02 21:20:22,351 - __main__ - INFO - Connecting to ESP32...
+2026-08-02 21:20:22,374 - __main__ - INFO - Application started successfully!
+2026-08-02 21:20:22,394 - flet_web.fastapi - INFO - New FletApp: 7ZEK0sHO
+INFO:     ::1:61269 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,401 - flet_web.fastapi - INFO - New FletApp: ZcoI3Nsf
+INFO:     127.0.0.1:59304 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,645 - flet_web.fastapi - INFO - New FletApp: GXwiGEAR
+INFO:     ::1:63269 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,700 - flet_web.fastapi - INFO - New FletApp: 92J4r1xO
+INFO:     127.0.0.1:57105 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,721 - flet_web.fastapi - INFO - New FletApp: Wz8wcCAr
+INFO:     ::1:52396 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,721 - flet_web.fastapi - INFO - New FletApp: yhXO4Ve7
+INFO:     127.0.0.1:61050 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,742 - flet_web.fastapi - INFO - New FletApp: ERdH1ccq
+INFO:     ::1:61861 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,742 - flet_web.fastapi - INFO - New FletApp: gIU7A6AV
+INFO:     127.0.0.1:50535 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,763 - flet_web.fastapi - INFO - New FletApp: uW35SEI7
+INFO:     ::1:50973 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,769 - flet_web.fastapi - INFO - New FletApp: KNvwDyQN
+INFO:     127.0.0.1:49671 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,783 - flet_web.fastapi - INFO - New FletApp: Clk9pAcI
+INFO:     ::1:51696 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,790 - flet_web.fastapi - INFO - New FletApp: wCbuAnSD
+INFO:     127.0.0.1:64381 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,804 - flet_web.fastapi - INFO - New FletApp: EJqfcwWU
+INFO:     ::1:57447 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,809 - flet_web.fastapi - INFO - New FletApp: tH67tXqP
+INFO:     127.0.0.1:53542 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,825 - flet_web.fastapi - INFO - New FletApp: O1yW5sB4
+INFO:     ::1:57230 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,839 - flet_web.fastapi - INFO - New FletApp: rLn1KWPC
+INFO:     127.0.0.1:63962 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,860 - flet_web.fastapi - INFO - New FletApp: CmuBt4lr
+INFO:     ::1:50925 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,860 - flet_web.fastapi - INFO - New FletApp: YOWC9L0I
+INFO:     127.0.0.1:56915 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,880 - flet_web.fastapi - INFO - New FletApp: xEUuDOeW
+INFO:     ::1:49744 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,901 - flet_web.fastapi - INFO - New FletApp: LruJEAV6
+INFO:     127.0.0.1:50060 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,915 - flet_web.fastapi - INFO - New FletApp: z8fEZJkg
+INFO:     ::1:57300 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,929 - flet_web.fastapi - INFO - New FletApp: KBnuuNMW
+INFO:     127.0.0.1:53115 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,943 - flet_web.fastapi - INFO - New FletApp: lsBAixfs
+INFO:     ::1:51237 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,948 - flet_web.fastapi - INFO - New FletApp: 9h77fdwu
+INFO:     127.0.0.1:50682 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,964 - flet_web.fastapi - INFO - New FletApp: 2ibaas9w
+INFO:     ::1:65140 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,978 - flet_web.fastapi - INFO - New FletApp: BAX46tKz
+INFO:     127.0.0.1:50881 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:22,978 - flet_web.fastapi - INFO - New FletApp: SOUU6YZR
+INFO:     ::1:51401 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,006 - flet_web.fastapi - INFO - New FletApp: 4KlqWuKa
+INFO:     127.0.0.1:64465 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,020 - flet_web.fastapi - INFO - New FletApp: q1DJQk4z
+INFO:     ::1:54103 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,026 - flet_web.fastapi - INFO - New FletApp: H0FmCKiF
+INFO:     127.0.0.1:62048 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,040 - flet_web.fastapi - INFO - New FletApp: i9AKNm7u
+INFO:     ::1:62427 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,061 - flet_web.fastapi - INFO - New FletApp: GMlKXxVA
+INFO:     127.0.0.1:52587 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,075 - flet_web.fastapi - INFO - New FletApp: YDsAnS0f
+INFO:     ::1:55704 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,082 - flet_web.fastapi - INFO - New FletApp: UzDyo35c
+INFO:     127.0.0.1:56174 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,096 - flet_web.fastapi - INFO - New FletApp: fJOfRfMJ
+INFO:     ::1:52805 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,110 - flet_web.fastapi - INFO - New FletApp: SOWea3l1
+INFO:     127.0.0.1:61832 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,115 - flet_web.fastapi - INFO - New FletApp: du52f7Jm
+INFO:     ::1:58447 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,130 - flet_web.fastapi - INFO - New FletApp: XsjJR1uQ
+INFO:     127.0.0.1:52810 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,151 - flet_web.fastapi - INFO - New FletApp: UszS8kAW
+INFO:     ::1:53261 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,165 - flet_web.fastapi - INFO - New FletApp: ls1aWTKH
+INFO:     127.0.0.1:57914 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,165 - flet_web.fastapi - INFO - New FletApp: comaseJh
+INFO:     ::1:61068 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,186 - flet_web.fastapi - INFO - New FletApp: TG7uqUoW
+INFO:     127.0.0.1:60361 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,207 - flet_web.fastapi - INFO - New FletApp: cMffhJ0b
+INFO:     ::1:64391 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,221 - flet_web.fastapi - INFO - New FletApp: 5rqbpb3W
+INFO:     127.0.0.1:51905 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,241 - flet_web.fastapi - INFO - New FletApp: QPiWFWWd
+INFO:     ::1:50261 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,262 - flet_web.fastapi - INFO - New FletApp: ze7pVYcj
+INFO:     127.0.0.1:60520 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,284 - flet_web.fastapi - INFO - New FletApp: sY3pLg8D
+INFO:     ::1:65402 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,304 - flet_web.fastapi - INFO - New FletApp: WSQ8lNiZ
+INFO:     127.0.0.1:65529 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,318 - flet_web.fastapi - INFO - New FletApp: gSLQFZeV
+INFO:     ::1:55252 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,332 - flet_web.fastapi - INFO - New FletApp: E0mjkGk6
+INFO:     127.0.0.1:50526 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,346 - flet_web.fastapi - INFO - New FletApp: ul8GzDQ6
+INFO:     ::1:57745 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,359 - flet_web.fastapi - INFO - New FletApp: wlZEkNWU
+INFO:     127.0.0.1:62851 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,359 - flet_web.fastapi - INFO - New FletApp: T5ANfAMy
+INFO:     ::1:59763 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,380 - flet_web.fastapi - INFO - New FletApp: SUTIEpJA
+INFO:     127.0.0.1:61511 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,394 - flet_web.fastapi - INFO - New FletApp: pOuLLRWQ
+INFO:     ::1:51570 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,394 - flet_web.fastapi - INFO - New FletApp: knv5KagO
+INFO:     127.0.0.1:64971 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,450 - flet_web.fastapi - INFO - New FletApp: iiCkmwvn
+INFO:     ::1:57794 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,504 - flet_web.fastapi - INFO - New FletApp: Nl5XGLqr
+INFO:     127.0.0.1:58171 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,526 - flet_web.fastapi - INFO - New FletApp: rSl3y1bp
+INFO:     ::1:63324 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,532 - flet_web.fastapi - INFO - New FletApp: RiFuvlVK
+INFO:     127.0.0.1:53938 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,547 - flet_web.fastapi - INFO - New FletApp: HojzxrRq
+INFO:     ::1:53334 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,547 - flet_web.fastapi - INFO - New FletApp: soAryJdv
+INFO:     127.0.0.1:49931 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,568 - flet_web.fastapi - INFO - New FletApp: 9C3I9UVV
+INFO:     ::1:54336 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,568 - flet_web.fastapi - INFO - New FletApp: ZmeMfYQq
+INFO:     127.0.0.1:64694 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,589 - flet_web.fastapi - INFO - New FletApp: LlIojo2e
+INFO:     ::1:49927 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,589 - flet_web.fastapi - INFO - New FletApp: l8OU7JEq
+INFO:     127.0.0.1:49282 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,616 - flet_web.fastapi - INFO - New FletApp: kfGca1w0
+INFO:     ::1:54949 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,616 - flet_web.fastapi - INFO - New FletApp: IBI2hX6l
+INFO:     127.0.0.1:52990 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,637 - flet_web.fastapi - INFO - New FletApp: 1mRyGJnz
+INFO:     ::1:59400 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,637 - flet_web.fastapi - INFO - New FletApp: FwX35NLP
+INFO:     127.0.0.1:51893 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,665 - flet_web.fastapi - INFO - New FletApp: x2fEC45m
+INFO:     ::1:56507 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,665 - flet_web.fastapi - INFO - New FletApp: FXlRyJyi
+INFO:     127.0.0.1:60377 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,686 - flet_web.fastapi - INFO - New FletApp: KxIjf8UU
+INFO:     ::1:57566 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,686 - flet_web.fastapi - INFO - New FletApp: T6AYprSd
+INFO:     127.0.0.1:51693 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,707 - flet_web.fastapi - INFO - New FletApp: yVsFueTB
+INFO:     ::1:61738 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,707 - flet_web.fastapi - INFO - New FletApp: pJPECaMD
+INFO:     127.0.0.1:56865 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,728 - flet_web.fastapi - INFO - New FletApp: 48Qwx8fN
+INFO:     ::1:60409 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,728 - flet_web.fastapi - INFO - New FletApp: T4CO7uAf
+INFO:     127.0.0.1:61002 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,748 - flet_web.fastapi - INFO - New FletApp: rSN91Rpb
+INFO:     ::1:56999 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,748 - flet_web.fastapi - INFO - New FletApp: k09bynT5
+INFO:     127.0.0.1:58166 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,776 - flet_web.fastapi - INFO - New FletApp: sBEFFcHV
+INFO:     ::1:62806 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,776 - flet_web.fastapi - INFO - New FletApp: ZFnJlx8u
+INFO:     127.0.0.1:55472 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,804 - flet_web.fastapi - INFO - New FletApp: nMSmnOJd
+INFO:     ::1:57871 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,804 - flet_web.fastapi - INFO - New FletApp: pg8MvETG
+INFO:     127.0.0.1:58656 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,922 - flet_web.fastapi - INFO - New FletApp: i0fBMeAQ
+INFO:     ::1:59609 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,976 - flet_web.fastapi - INFO - New FletApp: HzRgRLTC
+INFO:     127.0.0.1:61437 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,992 - flet_web.fastapi - INFO - New FletApp: DBe4Ey46
+INFO:     ::1:62138 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:23,997 - flet_web.fastapi - INFO - New FletApp: hWORL2pL
+INFO:     127.0.0.1:59615 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,012 - flet_web.fastapi - INFO - New FletApp: Y4edEDQJ
+INFO:     ::1:65505 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,012 - flet_web.fastapi - INFO - New FletApp: MrFV1KO8
+INFO:     127.0.0.1:59307 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,033 - flet_web.fastapi - INFO - New FletApp: qjVfMRVC
+INFO:     ::1:58659 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,033 - flet_web.fastapi - INFO - New FletApp: it6csfLe
+INFO:     127.0.0.1:51776 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,054 - flet_web.fastapi - INFO - New FletApp: wzU2BFCs
+INFO:     ::1:56802 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,054 - flet_web.fastapi - INFO - New FletApp: fwrBD8VK
+INFO:     127.0.0.1:60713 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,082 - flet_web.fastapi - INFO - New FletApp: CxjAvXYE
+INFO:     ::1:55163 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,082 - flet_web.fastapi - INFO - New FletApp: Mi3mJL6E
+INFO:     127.0.0.1:63008 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,096 - flet_web.fastapi - INFO - New FletApp: ZOmvBxQb
+INFO:     ::1:59583 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,103 - flet_web.fastapi - INFO - New FletApp: ybOhObU7
+INFO:     127.0.0.1:54205 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,123 - flet_web.fastapi - INFO - New FletApp: G3TD2haZ
+INFO:     ::1:52873 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,123 - flet_web.fastapi - INFO - New FletApp: DTUkDjY3
+INFO:     127.0.0.1:63392 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,144 - flet_web.fastapi - INFO - New FletApp: DV11FfRM
+INFO:     ::1:52008 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,144 - flet_web.fastapi - INFO - New FletApp: Xz0CbRlP
+INFO:     127.0.0.1:51615 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,168 - flet_web.fastapi - INFO - New FletApp: 9iBLcziv
+INFO:     ::1:53867 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,172 - flet_web.fastapi - INFO - New FletApp: KpIpFeIx
+INFO:     127.0.0.1:58025 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,193 - flet_web.fastapi - INFO - New FletApp: xylq2Ssv
+INFO:     ::1:61649 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,198 - flet_web.fastapi - INFO - New FletApp: DsUPI1Zm
+INFO:     127.0.0.1:55131 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,214 - flet_web.fastapi - INFO - New FletApp: ThwttMs7
+INFO:     ::1:52374 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,214 - flet_web.fastapi - INFO - New FletApp: 8A56vILg
+INFO:     127.0.0.1:53156 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,234 - flet_web.fastapi - INFO - New FletApp: LV96StEz
+INFO:     ::1:49673 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,234 - flet_web.fastapi - INFO - New FletApp: ZP1XpYOB
+INFO:     127.0.0.1:63342 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,263 - flet_web.fastapi - INFO - New FletApp: qjJRkMXO
+INFO:     ::1:60758 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,263 - flet_web.fastapi - INFO - New FletApp: cyEEarRE
+INFO:     127.0.0.1:58407 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,283 - flet_web.fastapi - INFO - New FletApp: IpnAOVVe
+INFO:     ::1:58648 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,283 - flet_web.fastapi - INFO - New FletApp: 1wYFCuyu
+INFO:     127.0.0.1:51766 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,311 - flet_web.fastapi - INFO - New FletApp: 5TyNL0yW
+INFO:     ::1:61076 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,311 - flet_web.fastapi - INFO - New FletApp: 2WaSmc1X
+INFO:     127.0.0.1:64126 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,331 - flet_web.fastapi - INFO - New FletApp: 0gMtM4Re
+INFO:     ::1:59331 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,339 - flet_web.fastapi - INFO - New FletApp: tfyy3iJu
+INFO:     127.0.0.1:54143 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,353 - flet_web.fastapi - INFO - New FletApp: 3BXEQ9A4
+INFO:     ::1:53588 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,358 - flet_web.fastapi - INFO - New FletApp: 7Yc7UQmp
+INFO:     127.0.0.1:64943 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,380 - flet_web.fastapi - INFO - New FletApp: TKx7qOzo
+INFO:     ::1:50446 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,380 - flet_web.fastapi - INFO - New FletApp: xSleuq5u
+INFO:     127.0.0.1:53803 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,401 - flet_web.fastapi - INFO - New FletApp: ckhOboWK
+INFO:     ::1:63678 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,401 - flet_web.fastapi - INFO - New FletApp: 72ADLxHj
+INFO:     127.0.0.1:54488 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,422 - flet_web.fastapi - INFO - New FletApp: jaSCwzFX
+INFO:     ::1:57808 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,422 - flet_web.fastapi - INFO - New FletApp: hUDfef9s
+INFO:     127.0.0.1:49339 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,443 - flet_web.fastapi - INFO - New FletApp: FZKBrmMg
+INFO:     ::1:52421 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,448 - flet_web.fastapi - INFO - New FletApp: lybpsT8z
+INFO:     127.0.0.1:56631 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,471 - flet_web.fastapi - INFO - New FletApp: fULOo6yE
+INFO:     ::1:56822 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,471 - flet_web.fastapi - INFO - New FletApp: zwS1vXbY
+INFO:     127.0.0.1:58536 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:24,477 - flet_web.fastapi - INFO - New session created (2 total): _yjVc6xJa6yhuizlM_7b098b11c06442e53a3cca17bf52017694ce45d2
+2026-08-02 21:20:24,477 - flet_web.fastapi - INFO - Start session: yjVc6xJa6yhuizlM
+2026-08-02 21:20:24,477 - __main__ - INFO - Starting application...
+2026-08-02 21:20:24,477 - __main__ - INFO - Creating controller...
+2026-08-02 21:20:24,477 - __main__ - INFO - Creating dashboard...
+2026-08-02 21:20:25,366 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22b9f5262d0>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /status
+2026-08-02 21:20:29,381 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bbb6b7290>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /status
+2026-08-02 21:20:32,435 - backend.esp32 - WARNING - Request failed for /status: HTTPConnectionPool(host='192.168.1.120', port=80): Max retries exceeded with url: /status (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc075db90>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)'))
+2026-08-02 21:20:32,532 - __main__ - INFO - Connecting to ESP32...
+2026-08-02 21:20:32,582 - __main__ - INFO - Application started successfully!
+2026-08-02 21:20:32,610 - flet_web.fastapi - INFO - New FletApp: verNrGO9
+INFO:     ::1:62612 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:32,610 - flet_web.fastapi - INFO - New FletApp: HlfGJE9O
+INFO:     127.0.0.1:56197 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:32,729 - flet_web.fastapi - INFO - New FletApp: v2Ze6zcL
+INFO:     127.0.0.1:63040 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:32,798 - flet_web.fastapi - INFO - New FletApp: vV6l90fD
+INFO:     127.0.0.1:53950 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:32,819 - flet_web.fastapi - INFO - New FletApp: dVvCae1C
+INFO:     127.0.0.1:53328 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:32,841 - flet_web.fastapi - INFO - New FletApp: 9VjddizT
+INFO:     127.0.0.1:65253 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:32,862 - flet_web.fastapi - INFO - New FletApp: iWAeZOLy
+INFO:     127.0.0.1:60161 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:32,888 - flet_web.fastapi - INFO - New FletApp: yfrQ6wgW
+INFO:     127.0.0.1:62359 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:32,909 - flet_web.fastapi - INFO - New FletApp: i0Eb5JUd
+INFO:     127.0.0.1:60396 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:32,927 - flet_web.fastapi - INFO - New FletApp: YIEe6FKx
+INFO:     127.0.0.1:63917 - "WebSocket /ws" [accepted]
+INFO:     connection open
+2026-08-02 21:20:35,536 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc221b210>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /gps
+2026-08-02 21:20:39,538 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bcc27a210>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /gps
+2026-08-02 21:20:42,541 - backend.esp32 - WARNING - Request failed for /gps: HTTPConnectionPool(host='192.168.1.120', port=80): Max retries exceeded with url: /gps (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc8ab2810>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)'))
+2026-08-02 21:20:47,581 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc5993bd0>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /status
+2026-08-02 21:20:51,623 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc5972890>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /status
+2026-08-02 21:20:54,684 - backend.esp32 - WARNING - Request failed for /status: HTTPConnectionPool(host='192.168.1.120', port=80): Max retries exceeded with url: /status (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc39426d0>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)'))
+2026-08-02 21:20:57,726 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc5991a90>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /gps
+2026-08-02 21:21:01,785 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc5994550>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /gps
+2026-08-02 21:21:04,851 - backend.esp32 - WARNING - Request failed for /gps: HTTPConnectionPool(host='192.168.1.120', port=80): Max retries exceeded with url: /gps (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc39045d0>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)'))
+2026-08-02 21:21:09,939 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bb5690290>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /status
+2026-08-02 21:21:13,969 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc5959d90>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /status
+2026-08-02 21:21:17,026 - backend.esp32 - WARNING - Request failed for /status: HTTPConnectionPool(host='192.168.1.120', port=80): Max retries exceeded with url: /status (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc5991450>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)'))
+2026-08-02 21:21:20,075 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc5950690>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /gps
+2026-08-02 21:21:24,095 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bbc0a5490>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /gps
+2026-08-02 21:21:27,158 - backend.esp32 - WARNING - Request failed for /gps: HTTPConnectionPool(host='192.168.1.120', port=80): Max retries exceeded with url: /gps (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc22530d0>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)'))
+2026-08-02 21:21:32,262 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc59cce10>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /status
+2026-08-02 21:21:36,299 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc5997f90>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /status
+2026-08-02 21:21:39,330 - backend.esp32 - WARNING - Request failed for /status: HTTPConnectionPool(host='192.168.1.120', port=80): Max retries exceeded with url: /status (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc5980c10>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)'))
+2026-08-02 21:21:42,399 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc59cc290>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /gps
+2026-08-02 21:21:46,435 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc3905d50>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /gps
+2026-08-02 21:21:49,499 - backend.esp32 - WARNING - Request failed for /gps: HTTPConnectionPool(host='192.168.1.120', port=80): Max retries exceeded with url: /gps (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22b9d7e2790>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)'))
+2026-08-02 21:21:54,616 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc22cd910>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /status
+2026-08-02 21:21:58,678 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc59cdd10>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /status
+2026-08-02 21:22:01,738 - backend.esp32 - WARNING - Request failed for /status: HTTPConnectionPool(host='192.168.1.120', port=80): Max retries exceeded with url: /status (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc59cec50>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)'))
+2026-08-02 21:22:04,774 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc59ad590>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /gps
+2026-08-02 21:22:08,799 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc3943ed0>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /gps
+2026-08-02 21:22:11,857 - backend.esp32 - WARNING - Request failed for /gps: HTTPConnectionPool(host='192.168.1.120', port=80): Max retries exceeded with url: /gps (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc5928ad0>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)'))
+2026-08-02 21:22:16,936 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc3904250>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /status
+2026-08-02 21:22:20,992 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc59acb50>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /status
+2026-08-02 21:22:24,038 - backend.esp32 - WARNING - Request failed for /status: HTTPConnectionPool(host='192.168.1.120', port=80): Max retries exceeded with url: /status (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc391be50>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)'))
+2026-08-02 21:22:27,083 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc5993610>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /gps
+2026-08-02 21:22:31,126 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc39060d0>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /gps
+2026-08-02 21:22:34,132 - backend.esp32 - WARNING - Request failed for /gps: HTTPConnectionPool(host='192.168.1.120', port=80): Max retries exceeded with url: /gps (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc5992210>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)'))
+2026-08-02 21:22:39,200 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc59a6110>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /status
+2026-08-02 21:22:43,218 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc59aec10>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /status
+2026-08-02 21:22:46,272 - backend.esp32 - WARNING - Request failed for /status: HTTPConnectionPool(host='192.168.1.120', port=80): Max retries exceeded with url: /status (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc5997110>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)'))
+2026-08-02 21:22:49,278 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc59e6490>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /gps
+2026-08-02 21:22:53,307 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc59e6c10>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /gps
+2026-08-02 21:22:56,360 - backend.esp32 - WARNING - Request failed for /gps: HTTPConnectionPool(host='192.168.1.120', port=80): Max retries exceeded with url: /gps (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc59e4290>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)'))
+2026-08-02 21:23:01,425 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc59393d0>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /status
+2026-08-02 21:23:05,453 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc5993f50>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /status
+2026-08-02 21:23:08,480 - backend.esp32 - WARNING - Request failed for /status: HTTPConnectionPool(host='192.168.1.120', port=80): Max retries exceeded with url: /status (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc5959c50>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)'))
+2026-08-02 21:23:11,536 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc5993450>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /gps
+2026-08-02 21:23:15,565 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc59920d0>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /gps
+2026-08-02 21:23:18,594 - backend.esp32 - WARNING - Request failed for /gps: HTTPConnectionPool(host='192.168.1.120', port=80): Max retries exceeded with url: /gps (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc3943690>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)'))
+2026-08-02 21:23:23,687 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc59cda10>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /status
+2026-08-02 21:23:27,715 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc59935d0>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /status
+2026-08-02 21:23:30,768 - backend.esp32 - WARNING - Request failed for /status: HTTPConnectionPool(host='192.168.1.120', port=80): Max retries exceeded with url: /status (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc3904e10>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)'))
+2026-08-02 21:23:33,817 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc59c65d0>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /gps
+2026-08-02 21:23:37,845 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc59c7150>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /gps
+2026-08-02 21:23:40,894 - backend.esp32 - WARNING - Request failed for /gps: HTTPConnectionPool(host='192.168.1.120', port=80): Max retries exceeded with url: /gps (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc593a210>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)'))
+2026-08-02 21:23:45,936 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc391bed0>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /status
+2026-08-02 21:23:49,966 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc69d6490>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /status
+2026-08-02 21:23:53,021 - backend.esp32 - WARNING - Request failed for /status: HTTPConnectionPool(host='192.168.1.120', port=80): Max retries exceeded with url: /status (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc69d7450>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)'))
+2026-08-02 21:23:56,079 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc69d5110>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /gps
+2026-08-02 21:24:00,108 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc69d4350>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /gps
+2026-08-02 21:24:03,163 - backend.esp32 - WARNING - Request failed for /gps: HTTPConnectionPool(host='192.168.1.120', port=80): Max retries exceeded with url: /gps (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc59cdc50>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)'))
+2026-08-02 21:24:08,215 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc598a690>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /status
+2026-08-02 21:24:12,269 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc69f6510>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /status
+2026-08-02 21:24:15,296 - backend.esp32 - WARNING - Request failed for /status: HTTPConnectionPool(host='192.168.1.120', port=80): Max retries exceeded with url: /status (Caused by ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc3906810>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)'))
+2026-08-02 21:24:18,335 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc5973c10>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /gps
+2026-08-02 21:24:22,362 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPConnection(host='192.168.1.120', port=80) at 0x22bc59c7090>, 'Connection to 192.168.1.120 timed out. (connect timeout=3)')': /gps
