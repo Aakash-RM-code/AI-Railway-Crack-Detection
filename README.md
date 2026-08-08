@@ -532,3 +532,376 @@ The project combines:
 This project is an engineering and research prototype.
 
 It must **not** be used as the sole safety mechanism for railway infrastructure without professional validation, redundancy, certification, and compliance with applicable railway safety standards.
+
+
+# AI Railway Crack Detection System
+
+An AI-powered railway inspection system that detects rail cracks and broken chains using a camera, YOLO-based computer vision, OpenVINO acceleration, and a React/FastAPI dashboard.
+
+## Requirements
+
+* Windows 10/11
+* Python 3.11
+* Node.js 18+
+* Git
+* Webcam/USB camera for live testing
+* 8 GB+ RAM recommended
+
+> ESP32, GPS, GSM and rover hardware are optional for software-only testing.
+
+---
+
+## 1. Clone the Repository
+
+```powershell
+git clone https://github.com/Aakash-RM-code/AI-Railway-Crack-Detection.git
+cd AI-Railway-Crack-Detection
+```
+
+---
+
+## 2. Backend Setup
+
+Create a Python 3.11 virtual environment:
+
+```powershell
+cd backend
+py -3.11 -m venv .venv
+```
+
+Activate it:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+If PowerShell blocks activation, run:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\.venv\Scripts\Activate.ps1
+```
+
+Install dependencies:
+
+```powershell
+pip install -r requirements.txt
+```
+
+Return to the project root:
+
+```powershell
+cd ..
+```
+
+---
+
+## 3. Configure the Backend
+
+The application supports different camera and inference modes.
+
+For a normal USB webcam:
+
+```powershell
+$env:CAMERA_MODE="usb"
+$env:INFERENCE_BACKEND="openvino"
+```
+
+For demo/testing mode without a physical camera:
+
+```powershell
+$env:CAMERA_MODE="demo"
+$env:INFERENCE_BACKEND="openvino"
+```
+
+OpenVINO is the default inference backend.
+
+The system keeps PyTorch as a fallback:
+
+```powershell
+$env:INFERENCE_BACKEND="torch"
+```
+
+Make sure the model files exist:
+
+```text
+models/
+├── best.pt
+└── best_openvino_model/
+```
+
+---
+
+## 4. Start the Backend
+
+From the project root:
+
+```powershell
+python -m uvicorn backend.main:app --host 127.0.0.1 --port 8080
+```
+
+The backend will be available at:
+
+```text
+http://127.0.0.1:8080
+```
+
+Health check:
+
+```text
+http://127.0.0.1:8080/api/health
+```
+
+Keep this terminal running.
+
+---
+
+## 5. Frontend Setup
+
+Open a **second PowerShell terminal**.
+
+From the project root:
+
+```powershell
+cd frontend
+npm install
+```
+
+Then start the development server:
+
+```powershell
+npm run dev
+```
+
+The frontend will normally be available at:
+
+```text
+http://localhost:5173
+```
+
+Open that address in your browser.
+
+---
+
+## 6. Run With a USB Webcam
+
+Connect your webcam before starting the backend.
+
+Set:
+
+```powershell
+$env:CAMERA_MODE="usb"
+$env:INFERENCE_BACKEND="openvino"
+```
+
+Then start:
+
+```powershell
+python -m uvicorn backend.main:app --host 127.0.0.1 --port 8080
+```
+
+Open the frontend.
+
+The camera card should display the live MJPEG stream.
+
+The detection pipeline is:
+
+```text
+USB Camera
+     ↓
+OpenCV Capture
+     ↓
+YOLO + OpenVINO
+     ↓
+Crack Detection
+     ↓
+Alert Manager
+     ↓
+Snapshot + CSV
+     ↓
+REST API / WebSocket
+     ↓
+React Dashboard
+```
+
+---
+
+## 7. Demo Mode
+
+If no camera or hardware is available:
+
+```powershell
+$env:CAMERA_MODE="demo"
+$env:INFERENCE_BACKEND="openvino"
+python -m uvicorn backend.main:app --host 127.0.0.1 --port 8080
+```
+
+This allows the software pipeline to be tested without connecting the physical rover.
+
+---
+
+## 8. ESP32 / GPS / GSM
+
+The hardware components are optional.
+
+The backend communicates with the ESP32 over HTTP.
+
+If the ESP32 is unavailable, the application should remain operational, but hardware-related features will report as disconnected/unavailable.
+
+For physical hardware testing, configure the ESP32 address and required environment variables according to the project's configuration.
+
+---
+
+## 9. Verify the Installation
+
+Backend tests:
+
+```powershell
+python -m pytest tests/ -q
+```
+
+TypeScript:
+
+```powershell
+cd frontend
+npx tsc --noEmit
+```
+
+Lint:
+
+```powershell
+npm run lint
+```
+
+Production build:
+
+```powershell
+npm run build
+```
+
+---
+
+## 10. Production Build
+
+Build the frontend:
+
+```powershell
+cd frontend
+npm run build
+```
+
+The generated production files can then be deployed using the project's configured deployment system.
+
+---
+
+## Troubleshooting
+
+### Backend does not start
+
+Check Python:
+
+```powershell
+python --version
+```
+
+It should be Python 3.11.
+
+Check dependencies:
+
+```powershell
+pip install -r backend/requirements.txt
+```
+
+### Webcam is not detected
+
+Test the camera directly:
+
+```powershell
+python -c "import cv2; c=cv2.VideoCapture(0, cv2.CAP_DSHOW); print('opened=',c.isOpened()); ok,f=c.read(); print('frame=',ok, 'shape=', None if f is None else f.shape); c.release()"
+```
+
+Expected output should contain:
+
+```text
+opened= True
+frame= True
+```
+
+### OpenVINO fails to load
+
+Check that:
+
+```text
+models/best_openvino_model/
+```
+
+exists.
+
+You can temporarily switch to PyTorch:
+
+```powershell
+$env:INFERENCE_BACKEND="torch"
+```
+
+### Frontend cannot connect to backend
+
+Make sure the backend is running on:
+
+```text
+http://127.0.0.1:8080
+```
+
+and that the frontend's API/WS configuration points to port `8080`.
+
+### Live camera shows a black screen
+
+Check:
+
+1. Webcam is connected.
+2. `CAMERA_MODE` is set to `usb`.
+3. Backend is running.
+4. OpenCV can capture frames.
+5. OpenVINO model exists.
+6. Browser can access:
+
+```text
+http://127.0.0.1:8080/api/camera/stream
+```
+
+---
+
+## Project Status
+
+The software stack has been verified with:
+
+* FastAPI backend
+* React frontend
+* YOLO crack detection
+* OpenVINO CPU inference
+* USB webcam capture
+* MJPEG live streaming
+* REST APIs
+* WebSocket realtime updates
+* Detection persistence
+* Snapshot generation
+* Alert/severity processing
+* ESP32 integration layer
+* GPS/GSM integration layer
+
+Current OpenVINO configuration:
+
+```text
+Image size: 640
+Confidence threshold: 0.70
+Inference backend: OpenVINO
+```
+
+The system detects:
+
+* Broken chain
+* Large crack
+* Medium crack
+* Small crack
+
+> Physical ESP32/rover/GPS/GSM functionality requires the corresponding hardware to be connected and configured.
+
