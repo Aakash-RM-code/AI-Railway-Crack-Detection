@@ -47,8 +47,19 @@ INFERENCE_IMGSZ = 640
 # cannot be loaded. Set INFERENCE_BACKEND=torch to force the PyTorch path.
 INFERENCE_BACKEND = os.getenv("INFERENCE_BACKEND", "openvino").strip().lower()
 
+# OpenVINO model precision selection (only used when INFERENCE_BACKEND=openvino):
+#   "fp32" (default) -> models/best_openvino_model/  (verified production model)
+#   "int8"           -> models/best_int8_openvino_model/  (experimental NNCF PTQ)
+# INT8 is opt-in. If the requested precision export is missing or fails to load,
+# CrackDetector falls back to the other OpenVINO export, then to PyTorch.
+OPENVINO_PRECISION = os.getenv("OPENVINO_PRECISION", "fp32").strip().lower()
+
 # OpenVINO IR export of best.pt; best.pt remains the canonical source model.
 OPENVINO_MODEL_PATH = str(MODELS_DIR / "best_openvino_model")
+
+# Experimental INT8 OpenVINO IR (NNCF post-training quantization of best.pt).
+# Kept separate so the production FP32 export is never replaced implicitly.
+OPENVINO_INT8_MODEL_PATH = str(MODELS_DIR / "best_int8_openvino_model")
 
 # =====================================================
 # CAMERA

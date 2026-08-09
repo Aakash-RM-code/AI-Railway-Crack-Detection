@@ -101,11 +101,20 @@ def disconnect_camera():
 
 
 def _mjpeg_generator():
-    """Generator yielding JPEG frames for HTTP MJPEG streaming."""
+    """Generator yielding JPEG frames for HTTP MJPEG streaming.
+
+    Paced at ~30 FPS and only transmits a JPEG when the camera has produced a
+    genuinely new frame (tracked by a monotonic frame ID). Repeatedly polling
+    the same cached JPEG is never sent again, so the browser never sees a
+    fabricated frame rate.
+    """
     pipeline = get_pipeline()
+    last_sent_id = 0
     while True:
         jpg_bytes = pipeline.get_frame_jpeg()
-        if jpg_bytes:
+        frame_id = pipeline.get_frame_jpeg_id()
+        if jpg_bytes and frame_id != last_sent_id:
+            last_sent_id = frame_id
             yield (
                 b"--frame\r\n"
                 b"Content-Type: image/jpeg\r\n\r\n" + jpg_bytes + b"\r\n"
@@ -113,7 +122,7 @@ def _mjpeg_generator():
         else:
             if not pipeline.is_running() and pipeline.camera_error():
                 break
-        time.sleep(0.03)  # ~30 FPS loop
+        time.sleep(0.033)  # ~30 FPS pacing
 
 
 @router.get("/camera/stream")

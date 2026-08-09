@@ -57,6 +57,7 @@ class CameraManager:
         self._running = False
         self._acq_thread = None
         self._latest_frame = None
+        self._latest_frame_id = 0
         self._error = None
         self._connected = False
 
@@ -164,6 +165,7 @@ class CameraManager:
                     return
                 if frame is not None:
                     self._latest_frame = frame
+                    self._latest_frame_id += 1
             time.sleep(0.005)
 
     def _read_once(self):
@@ -193,6 +195,16 @@ class CameraManager:
     def read_frame(self):
         with self._lock:
             return self._latest_frame
+
+    def read_frame_id(self):
+        """Return the monotonic ID of the latest acquired camera frame.
+
+        Increments exactly once per successful read() in the acquisition loop,
+        so callers can detect genuinely new frames versus repeated polling of
+        the same cached frame.
+        """
+        with self._lock:
+            return self._latest_frame_id
 
     # ------------------------------------------------------------------ processing
 
@@ -266,6 +278,7 @@ class CameraPipeline:
         self._latest_raw_time = 0.0
         self._latest_detection_results = None
         self._frame_jpeg: bytes = b""
+        self._frame_jpeg_id = 0
         self._frame_base64 = ""
         self._fps = 0.0
         self._inference_fps = 0.0
@@ -348,6 +361,7 @@ class CameraPipeline:
             self._latest_raw_time = 0.0
             self._latest_detection_results = None
             self._frame_jpeg = b""
+            self._frame_jpeg_id = 0
             self._frame_base64 = ""
         if was_running:
             self.start()
@@ -398,6 +412,15 @@ class CameraPipeline:
     def get_frame_jpeg(self) -> bytes:
         with self._lock:
             return self._frame_jpeg
+
+    def get_frame_jpeg_id(self) -> int:
+        """Return the camera frame ID associated with the current JPEG.
+
+        Lets the MJPEG generator detect genuinely new frames and avoid
+        re-transmitting the same JPEG as if it were a new camera frame.
+        """
+        with self._lock:
+            return self._frame_jpeg_id
 
     def get_frame_base64(self) -> str:
         with self._lock:
@@ -545,9 +568,11 @@ class CameraPipeline:
         prev_time = time.time()
         last_frame_time = time.time()
         got_first_frame = False
+        last_encoded_frame_id = 0
         try:
             while self._running:
                 frame = camera.read_frame()
+                frame_id = camera.read_frame_id()
                 if frame is None:
                     timeout = 3.0 if got_first_frame else 10.0
                     if time.time() - last_frame_time > timeout:
@@ -558,8 +583,18 @@ class CameraPipeline:
                     continue
 
                 got_first_frame = True
-                last_frame_time = time.time()
                 now = time.time()
+
+                # Re-encode the display frame ONLY when the camera has produced a
+                # genuinely new frame. Repeatedly reading the same cached frame is
+                # NOT a new camera frame; it must not inflate the FPS metric or
+                # re-transmit duplicate JPEGs.
+                if frame_id == last_encoded_frame_id:
+                    time.sleep(0.002)
+                    continue
+
+                last_encoded_frame_id = frame_id
+                last_frame_time = now
                 fps = 1.0 / max(now - prev_time, 1e-6)
                 prev_time = now
 
@@ -588,12 +623,13 @@ class CameraPipeline:
                     jpeg_bytes = jpeg_buf.tobytes()
                     with self._lock:
                         self._frame_jpeg = jpeg_bytes
+                        self._frame_jpeg_id = frame_id
                         self._frame_base64 = ""
                         self._fps = fps
                         height, width = display_frame.shape[:2]
                         self._resolution = f"{width} × {height}"
 
-                time.sleep(0.005)
+                time.sleep(0.002)
 
         except Exception as exc:
             with self._lock:

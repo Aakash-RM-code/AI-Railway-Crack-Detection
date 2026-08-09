@@ -1,0 +1,21 @@
+description: INT8 (NNCF PTQ) export of the crack detection model
+author: opencode-INT8
+version: 8.4.90
+license: AGPL-3.0 License (https://ultralytics.com/license)
+stride: 32
+task: detect
+head: Detect
+batch: 1
+imgsz:
+- 640
+- 640
+names:
+  0: broken chain
+  1: large crack
+  2: medium crack
+  3: small crack
+int8: true
+precision: int8
+source: best_openvino_model/best.xml (FP32)
+quantization: nncf_ptq
+calibration: detections/*.jpg

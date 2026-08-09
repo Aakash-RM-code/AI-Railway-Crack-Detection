@@ -16,12 +16,22 @@ Lifecycle:
 """
 
 import asyncio
+import logging
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 import config
 from backend.api.routes import router as api_router
 from backend.api.websocket import router as ws_router, telemetry_broadcaster_task
+
+# Make application INFO logs (detector model/precision selection, hardware
+# status, pipeline events) visible under uvicorn, whose default root level is
+# WARNING. uvicorn's own loggers are configured by uvicorn itself.
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s [%(name)s] %(message)s",
+)
 
 app = FastAPI(
     title="Railway Crack Detection & Rover Monitoring API",
