@@ -78,7 +78,11 @@ export interface CameraStatusPayload {
   mode?: string;
   running?: boolean;
   fps?: number;
+  camera_fps?: number;
+  display_fps?: number;
+  inference_fps?: number;
   resolution?: string;
+  native_stream_url?: string;
   error?: string | null;
 }
 
@@ -89,10 +93,14 @@ export function mapCameraStatus(payload: CameraStatusPayload): Partial<CameraSta
     source: mapSource(payload.mode),
     state: connectionFrom(running, payload.error),
     fps: payload.fps,
+    cameraFps: payload.camera_fps,
+    displayFps: payload.display_fps,
+    inferenceFps: payload.inference_fps,
     width,
     height,
     detectionActive: running,
     streamUrl: running ? "/api/camera/stream" : undefined,
+    nativeStreamUrl: payload.native_stream_url,
   });
 }
 

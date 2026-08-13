@@ -109,6 +109,10 @@ class CameraState(BaseCamelModel):
     height: int
     detection_active: bool
     stream_url: Optional[str] = None
+    camera_fps: float = 0.0
+    display_fps: float = 0.0
+    inference_fps: float = 0.0
+    native_stream_url: Optional[str] = None
 
 
 class Alert(BaseCamelModel):

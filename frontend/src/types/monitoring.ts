@@ -40,6 +40,33 @@ export interface CameraState {
   height: number;
   detectionActive: boolean;
   streamUrl: string | null;
+  /** Actual ESP32-CAM acquisition rate, measured by the backend. */
+  cameraFps?: number;
+  /** Frames rendered by the display path (browser native stream or backend proxy). */
+  displayFps?: number;
+  /** OpenVINO inference worker rate, measured by the backend. */
+  inferenceFps?: number;
+  /** ESP32-CAM native MJPEG URL for direct browser rendering (ESP32-CAM source). */
+  nativeStreamUrl?: string | null;
+}
+
+/**
+ * One detection box in source-frame pixel coordinates ([x1, y1, x2, y2]).
+ * Delivered over the /ws/detections channel; drawn by the browser overlay.
+ */
+export interface DetectionBox {
+  class_name: string;
+  confidence: number;
+  severity: Severity;
+  bbox: [number, number, number, number];
+}
+
+/** Raw /ws/detections payload (backend sends snake_case fields here). */
+export interface DetectionsMessage {
+  timestamp?: string;
+  alert?: Alert | null;
+  detections?: DetectionBox[];
+  latestSnapshot?: Snapshot | null;
 }
 
 export interface Alert {

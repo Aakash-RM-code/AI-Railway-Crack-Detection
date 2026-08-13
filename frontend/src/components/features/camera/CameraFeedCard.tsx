@@ -12,6 +12,7 @@ import { monitoringApi } from "@/services";
 import type { CameraSource } from "@/types/monitoring";
 
 import { MjpegPlayer } from "./MjpegPlayer";
+import { NativeVideoFeed } from "./NativeVideoFeed";
 
 const SOURCES: CameraSource[] = ["usb", "esp32-cam", "demo-video"];
 
@@ -62,6 +63,13 @@ export function CameraFeedCard() {
     event.target.value = "";
   };
 
+  const isEsp32Cam = data?.source === "esp32-cam";
+  const nativeStreamUrl = data?.nativeStreamUrl ?? null;
+
+  const cameraFps = data?.cameraFps ?? data?.fps ?? 0;
+  const displayFps = data?.displayFps ?? 0;
+  const inferenceFps = data?.inferenceFps ?? 0;
+
   return (
     <SectionCard
       title="Live Camera Feed"
@@ -74,14 +82,18 @@ export function CameraFeedCard() {
         <div className="flex items-center gap-2 rounded-md border border-border px-2 py-1">
           <StatusDot state={state} />
           <span className="text-xs text-muted-foreground">
-            {live ? `${data?.fps ?? 0} FPS` : "Offline"}
+            {live ? `${Math.round(cameraFps)} FPS` : "Offline"}
           </span>
         </div>
       }
       contentClassName="flex flex-col gap-4"
     >
       <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-border bg-background">
-        <MjpegPlayer enabled={live} />
+        {isEsp32Cam && nativeStreamUrl ? (
+          <NativeVideoFeed nativeStreamUrl={nativeStreamUrl} enabled={live} />
+        ) : (
+          <MjpegPlayer enabled={live} />
+        )}
         {live && (
           <span className="absolute left-3 top-3 z-10 flex items-center gap-2 rounded-md bg-background/80 px-2 py-1 text-xs font-medium text-foreground">
             <span className="size-2 animate-pulse rounded-full bg-destructive" /> LIVE
@@ -89,7 +101,8 @@ export function CameraFeedCard() {
         )}
         {data && (
           <span className="absolute bottom-3 right-3 z-10 rounded-md bg-background/80 px-2 py-1 text-xs text-muted-foreground">
-            {data.width}×{data.height}
+            {data.width}×{data.height} · {Math.round(cameraFps)} cam · {Math.round(displayFps)} disp
+            · {Math.round(inferenceFps)} AI
           </span>
         )}
       </div>

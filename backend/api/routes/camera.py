@@ -4,6 +4,7 @@ import os
 import time
 import base64
 import cv2
+import requests
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi.responses import StreamingResponse
 
@@ -55,6 +56,7 @@ def _build_camera_state() -> schemas.CameraState:
         conn_state = schemas.ConnectionState.ERROR
 
     fe_source = _map_backend_to_frontend_source(info.get("mode", "usb"))
+    is_esp32cam = info.get("mode", "usb") == "esp32cam"
 
     return schemas.CameraState(
         source=fe_source,
@@ -64,6 +66,10 @@ def _build_camera_state() -> schemas.CameraState:
         height=h,
         detection_active=info.get("running", False),
         stream_url="/api/camera/stream" if info.get("running") else None,
+        camera_fps=round(info.get("camera_fps", 0.0), 1),
+        display_fps=round(info.get("display_fps", 0.0), 1),
+        inference_fps=round(info.get("inference_fps", 0.0), 1),
+        native_stream_url=config.ESP32CAM_STREAM_URL if is_esp32cam else None,
     )
 
 
@@ -127,14 +133,48 @@ def _mjpeg_generator():
 
 @router.get("/camera/stream")
 def camera_stream():
-    """Streams live MJPEG video feed for direct browser <img> tag consumption."""
+    """Streams live video for direct browser <img> tag consumption.
+
+    Primary path: the browser renders the ESP32-CAM native MJPEG stream directly
+    (see ``native_stream_url`` in ``/api/camera/state``). This endpoint is a
+    transparent byte-stream proxy that forwards the ESP32-CAM MJPEG feed verbatim
+    — no decode, re-encode, or Base64 round-trip — for environments where the
+    browser cannot reach the camera itself.
+    """
     pipeline = get_pipeline()
     if not pipeline.is_running():
         pipeline.start()
-    return StreamingResponse(
-        _mjpeg_generator(),
-        media_type="multipart/x-mixed-replace; boundary=frame",
-    )
+
+    if pipeline.get_camera_source() != "esp32cam":
+        # Legacy MJPEG path for non-ESP32-CAM sources (USB / demo). Kept until
+        # obsolete source support is removed after runtime verification.
+        return StreamingResponse(
+            _mjpeg_generator(),
+            media_type="multipart/x-mixed-replace; boundary=frame",
+        )
+
+    try:
+        resp = requests.get(config.ESP32CAM_STREAM_URL, stream=True, timeout=(3, 30))
+    except Exception as exc:
+        raise HTTPException(status_code=503, detail=f"ESP32-CAM stream unavailable: {exc}")
+
+    content_type = resp.headers.get("Content-Type", "multipart/x-mixed-replace; boundary=frame")
+
+    def _proxy():
+        try:
+            if resp.status_code != 200:
+                return
+            for chunk in resp.iter_content(chunk_size=8192):
+                if chunk:
+                    # Count JPEG frame starts (SOI marker) for the display-FPS
+                    # metric; each MJPEG frame begins with 0xFF 0xD8.
+                    for _ in range(chunk.count(b"\xff\xd8")):
+                        pipeline.note_display_frame()
+                    yield chunk
+        finally:
+            resp.close()
+
+    return StreamingResponse(_proxy(), media_type=content_type)
 
 
 # --------------------------------------------------------------------------

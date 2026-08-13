@@ -76,10 +76,10 @@ CAMERA_HEIGHT = int(os.getenv("CAMERA_HEIGHT", "480"))
 DEFAULT_VIDEO_PATH = os.getenv("DEFAULT_VIDEO_PATH", "")
 
 # =====================================================
-# ESP32-CAM (capture board)
+# ESP32-CAM (capture board)http://10.199.134.41/
 # =====================================================
 
-ESP32CAM_IP = os.getenv("ESP32CAM_IP", "10.48.74.41")
+ESP32CAM_IP = os.getenv("ESP32CAM_IP", "10.199.134.41")
 ESP32CAM_PORT = int(os.getenv("ESP32CAM_PORT", "80"))
 
 ESP32CAM_STREAM_URL = os.getenv(

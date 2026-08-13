@@ -1,14 +1,18 @@
-"""Camera service — source management, acquisition, detection pipeline, and
-the background processing loop that used to live in the Flet AppController.
+"""Camera service — ESP32-CAM-first capture, detection pipeline, and runtime state.
 
-Split into two collaborators:
+Simplified for minimum practical latency:
 
-* ``CameraManager`` — owns the active source (usb | esp32cam | demo), runs an
-  acquisition thread, and drives the full detection pipeline per frame.
-* ``CameraPipeline`` — the long-running service. Holds the shared runtime state
-  (latest frame, alert, stats, health, severity counts), runs the capture loop
-  on a background thread, and triggers the ESP32 emergency stop on CRITICAL
-  detections. A process-wide instance is available via ``get_pipeline()``.
+* ``CameraManager`` — owns the active source (esp32cam production; usb/demo kept
+  for backward compatibility), runs an acquisition thread that retains ONLY the
+  newest frame, and reconnects automatically with bounded backoff on failure.
+* ``CameraPipeline`` — the long-running service. Runs the capture loop and an
+  asynchronous latest-frame-wins inference worker, and holds the shared runtime
+  state (latest frame, latest detection, alert, stats, health, FPS metrics).
+
+Display is NOT produced by the backend: the browser renders the ESP32-CAM native
+MJPEG stream directly (with a transparent byte-stream proxy fallback) and draws
+the detection overlay from WebSocket metadata. The backend only captures frames
+for AI inference, so the live video path never waits on YOLO.
 """
 
 import threading
@@ -25,7 +29,6 @@ from backend.detector.detector import CrackDetector
 from backend.services.alert_manager import AlertManager
 from backend.services.statistics_manager import StatisticsManager
 from backend.services.logger import DetectionLogger
-from backend.utils.imaging import jpeg_base64
 
 SEVERITY_LEVELS = ("SAFE", "LOW", "MEDIUM", "HIGH", "CRITICAL")
 
@@ -38,6 +41,8 @@ SEVERITY_LEVELS = ("SAFE", "LOW", "MEDIUM", "HIGH", "CRITICAL")
 class CameraManager:
 
     SOURCES = ("usb", "esp32cam", "demo")
+
+    MAX_REOPEN_DELAY = 30.0
 
     def __init__(self, mode: str | None = None):
         self.detector = CrackDetector(config.MODEL_PATH)
@@ -60,6 +65,9 @@ class CameraManager:
         self._latest_frame_id = 0
         self._error = None
         self._connected = False
+        self._read_fail_count = 0
+        self._reopen_delay = 2.0
+        self._last_reopen_time = 0.0
 
         self._open_source()
 
@@ -110,6 +118,21 @@ class CameraManager:
             except Exception:
                 pass
             self._cap = None
+        self._snapshot_url = ""
+
+    def _reopen_source(self) -> None:
+        """Best-effort reopen of the active source after read failures.
+
+        Uses bounded backoff (2s → 4s → … capped at MAX_REOPEN_DELAY) so a dead
+        camera never spins the acquisition thread hot. Resets the backoff on a
+        successful reopen. Safe to call only from the acquisition thread.
+        """
+        try:
+            self._open_source()
+            self._reopen_delay = 2.0
+        except Exception as exc:
+            self._error = f"Cannot reopen camera: {exc}"
+            self._reopen_delay = min(self._reopen_delay * 2.0, self.MAX_REOPEN_DELAY)
 
     def set_mode(self, mode: str) -> None:
         mode = (mode or "").strip().lower()
@@ -176,7 +199,20 @@ class CameraManager:
                     self._cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
                     ret, frame = self._cap.read()
                 if not ret:
+                    self._connected = False
+                    self._read_fail_count += 1
+                    if self._read_fail_count == 1:
+                        self._error = "Camera frame read failed"
+                    now = time.time()
+                    if now - self._last_reopen_time > self._reopen_delay:
+                        self._last_reopen_time = now
+                        self._reopen_source()
                     return None
+                self._connected = True
+                return frame
+            self._connected = True
+            self._error = None
+            self._read_fail_count = 0
             return frame
         if self._snapshot_url:
             return self._fetch_snapshot()
@@ -188,8 +224,17 @@ class CameraManager:
                 data = resp.read()
             arr = np.frombuffer(data, dtype=np.uint8)
             frame = cv2.imdecode(arr, cv2.IMREAD_COLOR)
+            if frame is None:
+                return None
+            self._connected = True
+            self._error = None
+            self._read_fail_count = 0
             return frame
         except Exception:
+            self._connected = False
+            if self._read_fail_count == 0:
+                self._error = "ESP32-CAM unreachable"
+            self._read_fail_count += 1
             return None
 
     def read_frame(self):
@@ -209,18 +254,18 @@ class CameraManager:
     # ------------------------------------------------------------------ processing
 
     def process_frame(self, frame):
-        """Run the full detection pipeline for a frame.
+        """Run the detection pipeline for a frame.
 
-        Returns a dict with the annotated frame, raw results, the generated alert,
-        and the updated statistics.
+        Returns a dict with the raw frame, raw results, the generated alert, and
+        the updated statistics. Detection, alert, persistence and statistics are
+        unchanged; the annotated plot is no longer produced here — overlays are
+        drawn in the browser from detection metadata.
         """
         results = self.detector.detect(frame)
         alert = self.alert_manager.process(results, self.detector.model.names)
 
         if alert["detected"]:
             self.statistics.update(alert["class_name"])
-
-        annotated = results[0].plot()
 
         logged = False
         if len(results[0].boxes) > 0:
@@ -234,7 +279,7 @@ class CameraManager:
             )
 
         return {
-            "frame": annotated,
+            "frame": frame,
             "results": results,
             "alert": alert,
             "stats": self.statistics.get_stats(),
@@ -257,12 +302,13 @@ class CameraPipeline:
     the API layer exposes.
 
     Decoupled Architecture:
-    - Camera capture + streaming loop runs continuously at ~25-30 FPS.
-    - AI inference worker runs on a separate background thread at ~10-13 FPS
-      using a latest-frame-wins strategy. Streaming never waits for inference.
+    - Camera capture runs continuously on a background thread and retains ONLY
+      the newest raw frame. The live display is the ESP32-CAM native stream and
+      never touches this thread.
+    - AI inference runs on a separate background thread using a
+      latest-frame-wins strategy (~10-16 FPS). Streaming never waits for
+      inference and inference never blocks capture.
     """
-
-    STALE_DETECTION_TTL_SEC = 0.5
 
     def __init__(self, mode: str | None = None, esp32_controller=None):
         self._lock = threading.RLock()
@@ -275,14 +321,20 @@ class CameraPipeline:
         self._inference_thread = None
 
         self._latest_raw_frame = None
+        self._latest_raw_id = 0
         self._latest_raw_time = 0.0
-        self._latest_detection_results = None
-        self._frame_jpeg: bytes = b""
-        self._frame_jpeg_id = 0
-        self._frame_base64 = ""
+        self._latest_detection = {"detections": [], "timestamp": 0.0}
+        self._last_frame_time = time.time()
         self._fps = 0.0
         self._inference_fps = 0.0
+        self._display_fps = 0.0
+        self._proxy_used = False
+        self._display_frame_count = 0
+        self._display_start_time = 0.0
         self._resolution = "--"
+        self._lazy_jpeg: bytes = b""
+        self._lazy_jpeg_id = 0
+        self._lazy_base64 = ""
         self._alert = {
             "detected": False,
             "severity": "SAFE",
@@ -358,11 +410,16 @@ class CameraPipeline:
             self._camera_mode = mode
             self._camera_error = None
             self._latest_raw_frame = None
+            self._latest_raw_id = 0
             self._latest_raw_time = 0.0
-            self._latest_detection_results = None
-            self._frame_jpeg = b""
-            self._frame_jpeg_id = 0
-            self._frame_base64 = ""
+            self._latest_detection = {"detections": [], "timestamp": 0.0}
+            self._lazy_jpeg = b""
+            self._lazy_jpeg_id = 0
+            self._lazy_base64 = ""
+            self._last_frame_time = time.time()
+            self._proxy_used = False
+            self._display_start_time = 0.0
+            self._display_frame_count = 0
         if was_running:
             self.start()
         return True
@@ -393,6 +450,8 @@ class CameraPipeline:
                 "mode": self._camera_mode,
                 "running": self._running,
                 "fps": self._fps,
+                "camera_fps": self._fps,
+                "display_fps": self._display_fps,
                 "inference_fps": self._inference_fps,
                 "resolution": self._resolution,
                 "error": self._camera_error,
@@ -410,28 +469,50 @@ class CameraPipeline:
             return self._camera_error
 
     def get_frame_jpeg(self) -> bytes:
-        with self._lock:
-            return self._frame_jpeg
+        """Return a JPEG of the latest raw frame, encoded lazily on demand.
 
-    def get_frame_jpeg_id(self) -> int:
-        """Return the camera frame ID associated with the current JPEG.
-
-        Lets the MJPEG generator detect genuinely new frames and avoid
-        re-transmitting the same JPEG as if it were a new camera frame.
+        Only used by legacy consumers — the live path renders the ESP32-CAM
+        native stream directly and never triggers this encoding.
         """
         with self._lock:
-            return self._frame_jpeg_id
+            self._build_lazy_jpeg_locked()
+            return self._lazy_jpeg
+
+    def get_frame_jpeg_id(self) -> int:
+        with self._lock:
+            return self._latest_raw_id
 
     def get_frame_base64(self) -> str:
         with self._lock:
-            if not self._frame_base64 and self._frame_jpeg:
+            self._build_lazy_jpeg_locked()
+            if not self._lazy_base64 and self._lazy_jpeg:
                 import base64
-                self._frame_base64 = base64.b64encode(self._frame_jpeg).decode("utf-8")
-            return self._frame_base64
+                self._lazy_base64 = base64.b64encode(self._lazy_jpeg).decode("utf-8")
+            return self._lazy_base64
 
-    def get_fps(self) -> float:
+    def _build_lazy_jpeg_locked(self) -> None:
+        frame = self._latest_raw_frame
+        if frame is None:
+            return
+        if self._lazy_jpeg_id == self._latest_raw_id and self._lazy_jpeg:
+            return
+        ret, buf = cv2.imencode(".jpg", frame, [int(cv2.IMWRITE_JPEG_QUALITY), 80])
+        if ret:
+            self._lazy_jpeg = buf.tobytes()
+            self._lazy_jpeg_id = self._latest_raw_id
+            self._lazy_base64 = ""
+
+    def get_camera_fps(self) -> float:
         with self._lock:
             return self._fps
+
+    def get_display_fps(self) -> float:
+        with self._lock:
+            return self._display_fps
+
+    def get_inference_fps(self) -> float:
+        with self._lock:
+            return self._inference_fps
 
     def get_resolution(self) -> str:
         with self._lock:
@@ -457,6 +538,18 @@ class CameraPipeline:
                 "note": self._health_note,
             }
 
+    def get_latest_detection(self) -> dict:
+        """Return the most recent inference result with per-box metadata.
+
+        Payload: ``{"detections": [{class_name, confidence, severity, bbox}], "timestamp"}``.
+        ``bbox`` is ``[x1, y1, x2, y2]`` in the source frame's pixel space.
+        """
+        with self._lock:
+            return {
+                "detections": [dict(d) for d in self._latest_detection["detections"]],
+                "timestamp": self._latest_detection["timestamp"],
+            }
+
     def get_state(self) -> dict:
         """Full snapshot of the runtime state for the API/websocket layer."""
         with self._lock:
@@ -465,6 +558,9 @@ class CameraPipeline:
                     "mode": self._camera_mode,
                     "running": self._running,
                     "fps": self._fps,
+                    "camera_fps": self._fps,
+                    "display_fps": self._display_fps,
+                    "inference_fps": self._inference_fps,
                     "resolution": self._resolution,
                     "error": self._camera_error,
                 },
@@ -480,6 +576,59 @@ class CameraPipeline:
             }
 
     # ------------------------------------------------------------------ background workers
+
+    def note_display_frame(self) -> None:
+        """Record one display frame for the display-FPS metric.
+
+        Called by the byte-stream proxy for every JPEG frame it forwards. When
+        the proxy is not in use (native stream path), display_fps mirrors the
+        captured stream rate, which the browser renders directly.
+        """
+        now = time.time()
+        with self._lock:
+            self._proxy_used = True
+            if self._display_start_time == 0.0:
+                self._display_start_time = now
+                self._display_frame_count = 0
+                return
+            self._display_frame_count += 1
+            elapsed = now - self._display_start_time
+            if elapsed >= 1.0:
+                self._display_fps = self._display_frame_count / elapsed
+                self._display_start_time = now
+                self._display_frame_count = 0
+
+    @staticmethod
+    def _severity_for_class(class_name: str) -> str:
+        name = (class_name or "").lower()
+        if "small" in name:
+            return "LOW"
+        if "medium" in name:
+            return "MEDIUM"
+        if "large" in name:
+            return "HIGH"
+        if "broken" in name:
+            return "CRITICAL"
+        return "UNKNOWN"
+
+    @staticmethod
+    def _build_detections_meta(results, model_names) -> list:
+        detections = []
+        if not results or len(results) == 0:
+            return detections
+        boxes = getattr(results[0], "boxes", None)
+        if boxes is None or len(boxes) == 0:
+            return detections
+        for box in boxes:
+            cls_id = int(box.cls[0])
+            class_name = model_names[cls_id]
+            detections.append({
+                "class_name": class_name,
+                "confidence": round(float(box.conf[0]), 3),
+                "severity": CameraPipeline._severity_for_class(class_name),
+                "bbox": [float(v) for v in box.xyxy[0].tolist()],
+            })
+        return detections
 
     def _inference_loop(self, camera: CameraManager) -> None:
         """Background worker running OpenVINO YOLO inference asynchronously.
@@ -513,12 +662,14 @@ class CameraPipeline:
                 inf_fps = 1.0 / max(now - prev_time, 1e-6)
                 prev_time = now
 
+                detections_meta = self._build_detections_meta(
+                    result.get("results"), camera.detector.model.names
+                )
+
                 with self._lock:
                     self._inference_fps = inf_fps
-                    self._latest_detection_results = {
-                        "results": result.get("results"),
-                        "alert": result.get("alert"),
-                        "stats": result.get("stats"),
+                    self._latest_detection = {
+                        "detections": detections_meta,
                         "timestamp": now,
                     }
 
@@ -547,101 +698,54 @@ class CameraPipeline:
             mode = self._camera_mode
 
         camera = None
-        try:
-            camera = CameraManager(mode=mode)
-            camera.start()
-        except Exception as exc:
-            with self._lock:
-                self._camera_error = str(exc)
-                self._running = False
-            return
-
-        # Start asynchronous inference worker thread
-        self._inference_thread = threading.Thread(
-            target=self._inference_loop,
-            args=(camera,),
-            daemon=True,
-            name="CameraInferenceWorker",
-        )
-        self._inference_thread.start()
-
-        prev_time = time.time()
-        last_frame_time = time.time()
-        got_first_frame = False
-        last_encoded_frame_id = 0
-        try:
-            while self._running:
-                frame = camera.read_frame()
-                frame_id = camera.read_frame_id()
-                if frame is None:
-                    timeout = 3.0 if got_first_frame else 10.0
-                    if time.time() - last_frame_time > timeout:
-                        with self._lock:
-                            self._camera_error = camera.error() or "No frames from camera"
-                        break
-                    time.sleep(0.01)
-                    continue
-
-                got_first_frame = True
-                now = time.time()
-
-                # Re-encode the display frame ONLY when the camera has produced a
-                # genuinely new frame. Repeatedly reading the same cached frame is
-                # NOT a new camera frame; it must not inflate the FPS metric or
-                # re-transmit duplicate JPEGs.
-                if frame_id == last_encoded_frame_id:
-                    time.sleep(0.002)
-                    continue
-
-                last_encoded_frame_id = frame_id
-                last_frame_time = now
-                fps = 1.0 / max(now - prev_time, 1e-6)
-                prev_time = now
-
-                # Store raw frame for inference worker
-                with self._lock:
-                    self._latest_raw_frame = frame
-                    self._latest_raw_time = now
-
-                # Composite newest raw frame with latest valid detection overlay
-                display_frame = frame
-                det_res = None
-                with self._lock:
-                    if self._latest_detection_results is not None:
-                        if (now - self._latest_detection_results["timestamp"]) <= self.STALE_DETECTION_TTL_SEC:
-                            det_res = self._latest_detection_results.get("results")
-
-                if det_res and len(det_res) > 0 and len(det_res[0].boxes) > 0:
-                    try:
-                        display_frame = det_res[0].plot(img=frame.copy())
-                    except Exception:
-                        display_frame = frame
-
-                # Encode to JPEG bytes (NO LOCK HELD during JPEG encode)
-                ret, jpeg_buf = cv2.imencode(".jpg", display_frame, [int(cv2.IMWRITE_JPEG_QUALITY), 80])
-                if ret:
-                    jpeg_bytes = jpeg_buf.tobytes()
-                    with self._lock:
-                        self._frame_jpeg = jpeg_bytes
-                        self._frame_jpeg_id = frame_id
-                        self._frame_base64 = ""
-                        self._fps = fps
-                        height, width = display_frame.shape[:2]
-                        self._resolution = f"{width} × {height}"
-
-                time.sleep(0.002)
-
-        except Exception as exc:
-            with self._lock:
-                self._camera_error = str(exc)
-        finally:
-            with self._lock:
-                self._running = False
-            if camera is not None:
+        while self._running:
+            if camera is None:
                 try:
-                    camera.close()
-                except Exception:
-                    pass
+                    camera = CameraManager(mode=mode)
+                    camera.start()
+                except Exception as exc:
+                    with self._lock:
+                        self._camera_error = f"Cannot open camera: {exc}"
+                    time.sleep(2.0)
+                    continue
+
+                # Start asynchronous inference worker thread
+                self._inference_thread = threading.Thread(
+                    target=self._inference_loop,
+                    args=(camera,),
+                    daemon=True,
+                    name="CameraInferenceWorker",
+                )
+                self._inference_thread.start()
+
+            frame = camera.read_frame()
+            if frame is None:
+                if not camera.is_connected():
+                    with self._lock:
+                        self._camera_error = camera.error() or "ESP32-CAM offline"
+                time.sleep(0.02)
+                continue
+
+            now = time.time()
+            frame_id = camera.read_frame_id()
+            with self._lock:
+                if self._latest_raw_id == frame_id:
+                    continue
+                self._latest_raw_id = frame_id
+                self._latest_raw_frame = frame
+                self._latest_raw_time = now
+                self._camera_error = None
+                height, width = frame.shape[:2]
+                self._resolution = f"{width} × {height}"
+                self._fps = 1.0 / max(now - self._last_frame_time, 1e-6)
+                self._last_frame_time = now
+                # Native (direct-to-browser) display path: the browser renders
+                # the same ESP32-CAM stream we capture, so its display rate is
+                # the captured stream rate. The proxy overwrites this when used.
+                if not self._proxy_used:
+                    self._display_fps = self._fps
+
+            time.sleep(0.002)
 
     def _update_health(self, total: int) -> None:
         """Score track health from cumulative detection count."""

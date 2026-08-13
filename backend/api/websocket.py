@@ -14,6 +14,7 @@ from typing import Set, Dict, Any
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 
+import config
 from backend.api import schemas
 from backend.services.camera import get_pipeline
 from backend.storage.repository import DetectionRepository
@@ -190,18 +191,26 @@ async def telemetry_broadcaster_task():
                     "mode": cam_info.get("mode", "usb"),
                     "running": cam_info.get("running", False),
                     "fps": round(cam_info.get("fps", 0.0), 1),
+                    "camera_fps": round(cam_info.get("camera_fps", 0.0), 1),
+                    "display_fps": round(cam_info.get("display_fps", 0.0), 1),
+                    "inference_fps": round(cam_info.get("inference_fps", 0.0), 1),
                     "resolution": cam_info.get("resolution", "640x480"),
                     "error": cam_info.get("error"),
                 }
+                if cam_info.get("mode") == "esp32cam":
+                    cam_payload["native_stream_url"] = config.ESP32CAM_STREAM_URL
                 await ws_hub.broadcast_json(ws_hub.camera_clients, cam_payload)
 
             if ws_hub.detections_clients:
                 alert = pipeline.get_alert()
-                if alert.get("detected"):
+                latest = pipeline.get_latest_detection()
+                dets = latest.get("detections", []) if latest else []
+                if dets:
                     snap = _repo.get_latest_snapshot()
                     det_payload = {
                         "timestamp": datetime.now().isoformat(),
                         "alert": alert,
+                        "detections": dets,
                         "latestSnapshot": snap.model_dump(by_alias=True) if snap else None,
                     }
                     await ws_hub.broadcast_json(ws_hub.detections_clients, det_payload)
