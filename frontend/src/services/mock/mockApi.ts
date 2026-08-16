@@ -43,7 +43,7 @@ const delay = <T>(value: T, ms = 120): Promise<T> =>
 /** Mutable in-memory state so UI actions feel real without a backend. */
 const state = {
   camera: {
-    source: "usb",
+    source: "esp32-cam",
     state: "disconnected",
     fps: 0,
     width: 1280,
@@ -243,18 +243,6 @@ export const mockApi: MonitoringApi = {
             : state.rover.speed,
     };
     return delay({ ...state.rover }, 150);
-  },
-
-  uploadDemoVideo: () => {
-    state.camera = {
-      ...state.camera,
-      source: "demo-video",
-      state: "connected",
-      detectionActive: true,
-      fps: randomInt(22, 30),
-      streamUrl: null,
-    };
-    return delay(state.camera, 800);
   },
 
   generateInspectionReport: () =>

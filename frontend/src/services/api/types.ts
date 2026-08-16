@@ -48,7 +48,6 @@ export interface RoverCommandRequest {
 
 export interface CameraConnectRequest {
   source: CameraSource;
-  videoPath?: string;
 }
 
 export interface ReportResponse {
@@ -77,6 +76,5 @@ export interface MonitoringApi {
   getLatestSnapshot(): Promise<Snapshot>;
   getRoverState(): Promise<RoverState>;
   sendRoverCommand(request: RoverCommandRequest): Promise<RoverState>;
-  uploadDemoVideo(file: File): Promise<CameraState>;
   generateInspectionReport(): Promise<ReportResponse>;
 }

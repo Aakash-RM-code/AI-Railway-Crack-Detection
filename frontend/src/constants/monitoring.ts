@@ -55,9 +55,7 @@ export const DEVICE_LABELS: Record<DeviceId, string> = {
 };
 
 export const CAMERA_SOURCE_LABELS: Record<CameraSource, string> = {
-  usb: "USB Camera",
   "esp32-cam": "ESP32-CAM",
-  "demo-video": "Demo Video",
 };
 
 export const HEALTH_STATUS_LABELS: Record<HealthStatus, string> = {

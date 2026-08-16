@@ -54,9 +54,7 @@ class DeviceId(str, Enum):
 
 
 class CameraSource(str, Enum):
-    USB = "usb"
     ESP32_CAM = "esp32-cam"
-    DEMO_VIDEO = "demo-video"
 
 
 class RoverCommand(str, Enum):
@@ -225,8 +223,7 @@ class RoverCommandRequest(BaseCamelModel):
 
 
 class CameraConnectRequest(BaseCamelModel):
-    source: CameraSource
-    video_path: Optional[str] = None
+    source: CameraSource = CameraSource.ESP32_CAM
 
 
 class ReportResponse(BaseCamelModel):
@@ -271,7 +268,6 @@ class Health(BaseCamelModel):
 
 class RuntimeState(BaseCamelModel):
     camera: CameraStatus
-    frame_base64: str = ""
     alert: LegacyAlert
     stats: Stats
     severity_counts: dict[str, int]
@@ -284,10 +280,6 @@ class HistoryRow(BaseCamelModel):
     confidence: float
     image: str
 
-
-class CameraSourceRequest(BaseCamelModel):
-    mode: str
-    force: bool = False
 
 
 class SpeedRequest(BaseCamelModel):

@@ -19,11 +19,3 @@ router.include_router(detections_router)
 router.include_router(hardware_router)
 router.include_router(reports_router)
 
-
-# Legacy endpoint backward compatibility
-@router.get("/state")
-def legacy_get_state():
-    from backend.services.camera import get_pipeline
-    state = get_pipeline().get_state()
-    state.pop("frame_base64", None)  # heavy payload; unused by the new UI
-    return state

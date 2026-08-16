@@ -4,7 +4,6 @@ Provides separate WebSocket channels for:
 - /ws/telemetry: System, rover, health, GPS, and GSM real-time telemetry.
 - /ws/detections: Real-time detection events broadcast on crack detection.
 - /ws/camera-status: Live camera operational status, connection, FPS, resolution.
-- /ws/stream: Legacy unified stream endpoint for backward compatibility.
 """
 
 import asyncio
@@ -31,7 +30,6 @@ class WebSocketHub:
         self.telemetry_clients: Set[WebSocket] = set()
         self.detections_clients: Set[WebSocket] = set()
         self.camera_clients: Set[WebSocket] = set()
-        self.stream_clients: Set[WebSocket] = set()
 
     async def connect(self, websocket: WebSocket, channel: str):
         await websocket.accept()
@@ -41,8 +39,6 @@ class WebSocketHub:
             self.detections_clients.add(websocket)
         elif channel == "camera":
             self.camera_clients.add(websocket)
-        elif channel == "stream":
-            self.stream_clients.add(websocket)
 
     def disconnect(self, websocket: WebSocket, channel: str):
         if channel == "telemetry":
@@ -51,8 +47,6 @@ class WebSocketHub:
             self.detections_clients.discard(websocket)
         elif channel == "camera":
             self.camera_clients.discard(websocket)
-        elif channel == "stream":
-            self.stream_clients.discard(websocket)
 
     async def broadcast_json(self, clients: Set[WebSocket], payload: Dict[str, Any]):
         if not clients:
@@ -124,24 +118,6 @@ async def ws_camera_status(websocket: WebSocket):
         ws_hub.disconnect(websocket, "camera")
 
 
-@router.websocket("/stream")
-async def ws_legacy_stream(websocket: WebSocket):
-    """Legacy unified WebSocket channel pushing runtime state (without the
-    heavy base64 frame payload)."""
-    await websocket.accept()
-    pipeline = get_pipeline()
-    try:
-        while True:
-            state = pipeline.get_state()
-            state.pop("frame_base64", None)  # heavy payload, legacy client only
-            await websocket.send_json(state)
-            await websocket.receive_text()
-    except WebSocketDisconnect:
-        ws_hub.disconnect(websocket, "stream")
-    except Exception:
-        ws_hub.disconnect(websocket, "stream")
-
-
 # --------------------------------------------------------------------------
 # Background Event Loops for Broadcasts
 # --------------------------------------------------------------------------
@@ -188,7 +164,7 @@ async def telemetry_broadcaster_task():
                 cam_info = pipeline.get_camera_info()
                 cam_payload = {
                     "timestamp": datetime.now().isoformat(),
-                    "mode": cam_info.get("mode", "usb"),
+                    "mode": cam_info.get("mode", "esp32cam"),
                     "running": cam_info.get("running", False),
                     "fps": round(cam_info.get("fps", 0.0), 1),
                     "camera_fps": round(cam_info.get("camera_fps", 0.0), 1),

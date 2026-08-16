@@ -65,22 +65,15 @@ OPENVINO_INT8_MODEL_PATH = str(MODELS_DIR / "best_int8_openvino_model")
 # CAMERA
 # =====================================================
 
-# Active source: "usb" | "esp32cam" | "demo"
+# Active source: "esp32cam"
 CAMERA_MODE = os.getenv("CAMERA_MODE", "esp32cam")
 
-CAMERA_INDEX = int(os.getenv("CAMERA_INDEX", "0"))
-CAMERA_WIDTH = int(os.getenv("CAMERA_WIDTH", "640"))
-CAMERA_HEIGHT = int(os.getenv("CAMERA_HEIGHT", "480"))
-
-# Demo video path (set at runtime when a file is picked in the UI)
-DEFAULT_VIDEO_PATH = os.getenv("DEFAULT_VIDEO_PATH", "")
-
 # =====================================================
-# ESP32-CAM (capture board)http://10.199.134.41/
+# ESP32-CAM (capture board)
 # =====================================================
 
-ESP32CAM_IP = os.getenv("ESP32CAM_IP", "10.199.134.41")
-ESP32CAM_PORT = int(os.getenv("ESP32CAM_PORT", "80"))
+ESP32CAM_IP = os.getenv("ESP32CAM_IP", "192.168.137.25")
+ESP32CAM_PORT = int(os.getenv("ESP32CAM_PORT", "81"))
 
 ESP32CAM_STREAM_URL = os.getenv(
     "ESP32CAM_STREAM_URL",

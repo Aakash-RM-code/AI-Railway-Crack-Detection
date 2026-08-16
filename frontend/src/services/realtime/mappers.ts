@@ -23,10 +23,8 @@ import type {
 // Shared helpers
 // ---------------------------------------------------------------------------
 
-function mapSource(mode?: string): CameraSource {
-  if (mode === "esp32cam" || mode === "esp32-cam") return "esp32-cam";
-  if (mode === "demo" || mode === "demo-video") return "demo-video";
-  return "usb";
+function mapSource(_mode?: string): CameraSource {
+  return "esp32-cam";
 }
 
 function mapCrackClass(cls?: string | null): CrackClass | null {

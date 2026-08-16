@@ -30,14 +30,14 @@ class TestPhase1Endpoints(unittest.TestCase):
         res = self.client.get("/api/camera/state")
         self.assertEqual(res.status_code, 200)
         data = res.json()
-        self.assertIn("source", data)
+        self.assertEqual(data.get("source"), "esp32-cam")
         self.assertIn("state", data)
         self.assertIn("fps", data)
 
     def test_camera_connect_disconnect(self):
-        res_conn = self.client.post("/api/camera/connect", json={"source": "usb"})
+        res_conn = self.client.post("/api/camera/connect", json={"source": "esp32-cam"})
         self.assertEqual(res_conn.status_code, 200)
-        self.assertEqual(res_conn.json().get("source"), "usb")
+        self.assertEqual(res_conn.json().get("source"), "esp32-cam")
 
         res_disc = self.client.post("/api/camera/disconnect")
         self.assertEqual(res_disc.status_code, 200)

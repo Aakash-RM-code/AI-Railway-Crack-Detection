@@ -1,7 +1,7 @@
 """Phase 2 WebSocket Channel Tests.
 
 Verifies connection and communication across separate WebSocket channels:
-/ws/telemetry, /ws/detections, /ws/camera-status, /ws/stream.
+/ws/telemetry, /ws/detections, /ws/camera-status.
 """
 
 import unittest
@@ -30,13 +30,6 @@ class TestPhase2WebSockets(unittest.TestCase):
             websocket.send_text("ping")
             data = websocket.receive_text()
             self.assertEqual(data, "pong")
-
-    def test_legacy_stream_websocket(self):
-        with self.client.websocket_connect("/ws/stream") as websocket:
-            websocket.send_text("ping")
-            data = websocket.receive_json()
-            self.assertIn("camera", data)
-            self.assertIn("alert", data)
 
 
 if __name__ == "__main__":

@@ -27,6 +27,10 @@ class TestConfigPaths(unittest.TestCase):
         self.assertGreater(config.CONFIDENCE_THRESHOLD, 0.0)
         self.assertLessEqual(config.CONFIDENCE_THRESHOLD, 1.0)
 
+    def test_camera_mode_is_esp32cam(self):
+        self.assertEqual(config.CAMERA_MODE, "esp32cam")
+        self.assertTrue(config.ESP32CAM_STREAM_URL.startswith("http://"))
+
 
 class TestBackendImports(unittest.TestCase):
     def test_detector(self):

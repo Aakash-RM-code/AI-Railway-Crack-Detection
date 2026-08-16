@@ -11,7 +11,7 @@ export type ConnectionState = "connected" | "connecting" | "disconnected" | "err
 
 export type DeviceId = "camera" | "esp32" | "gps" | "gsm";
 
-export type CameraSource = "usb" | "esp32-cam" | "demo-video";
+export type CameraSource = "esp32-cam";
 
 export type RoverCommand =
   "forward" | "backward" | "left" | "right" | "stop" | "emergency_stop" | "set_speed";

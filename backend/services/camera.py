@@ -2,9 +2,9 @@
 
 Simplified for minimum practical latency:
 
-* ``CameraManager`` — owns the active source (esp32cam production; usb/demo kept
-  for backward compatibility), runs an acquisition thread that retains ONLY the
-  newest frame, and reconnects automatically with bounded backoff on failure.
+* ``CameraManager`` — owns the active source (ESP32-CAM), runs an acquisition
+  thread that retains ONLY the newest frame, and reconnects automatically with
+  bounded backoff on failure.
 * ``CameraPipeline`` — the long-running service. Runs the capture loop and an
   asynchronous latest-frame-wins inference worker, and holds the shared runtime
   state (latest frame, latest detection, alert, stats, health, FPS metrics).
@@ -40,7 +40,7 @@ SEVERITY_LEVELS = ("SAFE", "LOW", "MEDIUM", "HIGH", "CRITICAL")
 
 class CameraManager:
 
-    SOURCES = ("usb", "esp32cam", "demo")
+    SOURCES = ("esp32cam",)
 
     MAX_REOPEN_DELAY = 30.0
 
@@ -53,7 +53,7 @@ class CameraManager:
         self.logger = DetectionLogger()
 
         self._lock = threading.RLock()
-        self.mode = (mode or getattr(config, "CAMERA_MODE", "usb")).strip().lower()
+        self.mode = (mode or getattr(config, "CAMERA_MODE", "esp32cam")).strip().lower()
         if self.mode not in self.SOURCES:
             raise ValueError(f"Unknown camera source: {self.mode}")
 
@@ -78,18 +78,7 @@ class CameraManager:
         self._connected = False
         self._error = None
 
-        if self.mode == "usb":
-            index = int(getattr(config, "CAMERA_INDEX", 0))
-            cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
-            if not cap.isOpened():
-                cap = cv2.VideoCapture(index)
-            cap.set(cv2.CAP_PROP_FRAME_WIDTH, getattr(config, "CAMERA_WIDTH", 640))
-            cap.set(cv2.CAP_PROP_FRAME_HEIGHT, getattr(config, "CAMERA_HEIGHT", 480))
-            if not cap.isOpened():
-                raise RuntimeError(f"Could not open USB camera (index {index})")
-            self._cap = cap
-
-        elif self.mode == "esp32cam":
+        if self.mode == "esp32cam":
             stream_url = getattr(config, "ESP32CAM_STREAM_URL", "")
             cap = cv2.VideoCapture(stream_url)
             if cap.isOpened():
@@ -99,15 +88,8 @@ class CameraManager:
                 self._snapshot_url = getattr(config, "ESP32CAM_SNAPSHOT_URL", "")
                 if not self._snapshot_url:
                     raise RuntimeError("ESP32-CAM stream/snapshot URL not configured")
-
-        elif self.mode == "demo":
-            video_path = getattr(config, "DEFAULT_VIDEO_PATH", "")
-            if not video_path:
-                raise RuntimeError("DEFAULT_VIDEO_PATH not configured for demo mode")
-            cap = cv2.VideoCapture(video_path)
-            if not cap.isOpened():
-                raise RuntimeError(f"Could not open demo video: {video_path}")
-            self._cap = cap
+        else:
+            raise ValueError(f"Unknown camera source: {self.mode}")
 
         self._connected = True
 
@@ -134,19 +116,6 @@ class CameraManager:
             self._error = f"Cannot reopen camera: {exc}"
             self._reopen_delay = min(self._reopen_delay * 2.0, self.MAX_REOPEN_DELAY)
 
-    def set_mode(self, mode: str) -> None:
-        mode = (mode or "").strip().lower()
-        if mode not in self.SOURCES:
-            raise ValueError(f"Unknown camera source: {mode}")
-        if mode == self.mode:
-            return
-        was_running = self.is_running()
-        self.stop()
-        self.mode = mode
-        self._open_source()
-        if was_running:
-            self.start()
-
     def start(self) -> None:
         with self._lock:
             if self._running:
@@ -172,9 +141,6 @@ class CameraManager:
     def error(self) -> str | None:
         return self._error
 
-    def set_video_path(self, path: str) -> None:
-        config.DEFAULT_VIDEO_PATH = path
-
     # ------------------------------------------------------------------ acquisition
 
     def _acquire_loop(self) -> None:
@@ -195,21 +161,15 @@ class CameraManager:
         if self._cap is not None:
             ret, frame = self._cap.read()
             if not ret:
-                if self.mode == "demo":
-                    self._cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
-                    ret, frame = self._cap.read()
-                if not ret:
-                    self._connected = False
-                    self._read_fail_count += 1
-                    if self._read_fail_count == 1:
-                        self._error = "Camera frame read failed"
-                    now = time.time()
-                    if now - self._last_reopen_time > self._reopen_delay:
-                        self._last_reopen_time = now
-                        self._reopen_source()
-                    return None
-                self._connected = True
-                return frame
+                self._connected = False
+                self._read_fail_count += 1
+                if self._read_fail_count == 1:
+                    self._error = "Camera frame read failed"
+                now = time.time()
+                if now - self._last_reopen_time > self._reopen_delay:
+                    self._last_reopen_time = now
+                    self._reopen_source()
+                return None
             self._connected = True
             self._error = None
             self._read_fail_count = 0
@@ -316,7 +276,7 @@ class CameraPipeline:
         self._esp = esp32_controller or None
         self._running = False
         self._camera_error: str | None = None
-        self._camera_mode = (mode or getattr(config, "CAMERA_MODE", "usb")).strip().lower()
+        self._camera_mode = (mode or getattr(config, "CAMERA_MODE", "esp32cam")).strip().lower()
         self._camera_thread = None
         self._inference_thread = None
 
@@ -332,9 +292,6 @@ class CameraPipeline:
         self._display_frame_count = 0
         self._display_start_time = 0.0
         self._resolution = "--"
-        self._lazy_jpeg: bytes = b""
-        self._lazy_jpeg_id = 0
-        self._lazy_base64 = ""
         self._alert = {
             "detected": False,
             "severity": "SAFE",
@@ -413,9 +370,6 @@ class CameraPipeline:
             self._latest_raw_id = 0
             self._latest_raw_time = 0.0
             self._latest_detection = {"detections": [], "timestamp": 0.0}
-            self._lazy_jpeg = b""
-            self._lazy_jpeg_id = 0
-            self._lazy_base64 = ""
             self._last_frame_time = time.time()
             self._proxy_used = False
             self._display_start_time = 0.0
@@ -428,15 +382,6 @@ class CameraPipeline:
         with self._lock:
             mode = self._camera_mode
         return self.set_camera_source(mode, force=True)
-
-    def set_demo_video_path(self, path: str) -> bool:
-        import os
-
-        path = (path or "").strip()
-        if not path or not os.path.isfile(path):
-            return False
-        config.DEFAULT_VIDEO_PATH = path
-        return True
 
     # ------------------------------------------------------------------ state accessors
 
@@ -467,40 +412,6 @@ class CameraPipeline:
     def camera_error(self) -> str | None:
         with self._lock:
             return self._camera_error
-
-    def get_frame_jpeg(self) -> bytes:
-        """Return a JPEG of the latest raw frame, encoded lazily on demand.
-
-        Only used by legacy consumers — the live path renders the ESP32-CAM
-        native stream directly and never triggers this encoding.
-        """
-        with self._lock:
-            self._build_lazy_jpeg_locked()
-            return self._lazy_jpeg
-
-    def get_frame_jpeg_id(self) -> int:
-        with self._lock:
-            return self._latest_raw_id
-
-    def get_frame_base64(self) -> str:
-        with self._lock:
-            self._build_lazy_jpeg_locked()
-            if not self._lazy_base64 and self._lazy_jpeg:
-                import base64
-                self._lazy_base64 = base64.b64encode(self._lazy_jpeg).decode("utf-8")
-            return self._lazy_base64
-
-    def _build_lazy_jpeg_locked(self) -> None:
-        frame = self._latest_raw_frame
-        if frame is None:
-            return
-        if self._lazy_jpeg_id == self._latest_raw_id and self._lazy_jpeg:
-            return
-        ret, buf = cv2.imencode(".jpg", frame, [int(cv2.IMWRITE_JPEG_QUALITY), 80])
-        if ret:
-            self._lazy_jpeg = buf.tobytes()
-            self._lazy_jpeg_id = self._latest_raw_id
-            self._lazy_base64 = ""
 
     def get_camera_fps(self) -> float:
         with self._lock:
@@ -564,7 +475,6 @@ class CameraPipeline:
                     "resolution": self._resolution,
                     "error": self._camera_error,
                 },
-                "frame_base64": self.get_frame_base64(),
                 "alert": dict(self._alert),
                 "stats": dict(self._stats),
                 "severity_counts": dict(self._severity_counts),
